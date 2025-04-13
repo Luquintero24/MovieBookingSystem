@@ -34,7 +34,7 @@ header{
     /* background: var(--main-color); */
 }
 header.shadow{
-    background: var(--bg-color);
+    background: #999;
     box-shadow: 0 0 4px rgb(14 55 54/15%);
 }
 header.shadow .navbar a{
@@ -52,6 +52,12 @@ header.shadow .logo{
     color: var(--bg-color);
     display: flex;
     column-gap: 0.5rem;
+}
+
+.logo img {
+    height: 100%;
+    width: auto;
+    max-height: 40px; /* ensures the logo doesn't get too big */
 }
 .bx{
     color: var(--main-color);
@@ -82,6 +88,19 @@ header.shadow .logo{
 .navbar .home-active::after{
     width: 100%;
 }
+
+.search-bar {
+    margin-left: 1rem;
+}
+
+.search-bar input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 0.9rem;
+}
+
+
 #menu-icon{
     font-size: 24px;
     cursor: pointer;
@@ -391,5 +410,11 @@ section{
     }
     .movies-container{
         grid-template-columns: repeat(auto-fit, minmax(140px, auto));
+    }
+}
+
+@media (max-width: 774px) {
+    .search-bar {
+        display: none;
     }
 }

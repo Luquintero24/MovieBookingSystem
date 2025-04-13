@@ -15,17 +15,19 @@
     <!-- Navbar  -->
     <header>
         <a href="#home" class="logo">
-            <i class='bx bxs-movie'></i>Sanamio
+            <img src="./img/raidertix-high-resolution-logo-transparent (1).png" alt="">
         </a>
         <div class="bx bx-menu" id="menu-icon"></div>
 
         <!-- menu  -->
         <ul class="navbar">
             <li><a href="#home" class="home-active">Home</a></li>
-            <li><a href="#movies">Movies</a></li>
-            <li><a href="#coming">Coming</a></li>
-            <li><a href="#newsletter">Newsletter</a></li>
+            <li><a href="#movies">Browse Full Catalog</a></li>
+            <li><a href="#coming">Upcoming films</a></li>
         </ul>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search movies...">
+        </div>
         <a href="#" class="btn">Sign In</a>
     </header>
 
@@ -83,7 +85,7 @@
 
     <!-- Movies  -->
     <div class="movies" id="movies">
-        <h2 class="heading">Opening This Week</h2>
+        <h2 class="heading">Currently Showing</h2>
         <!-- Movies container  -->
         <div class="movies-container">
             <!-- box-1  -->
@@ -249,19 +251,12 @@
         </div>
     </section>
 
-    <!-- Newsletter /\ -->
-    <section class="newsletter" id="newsletter">
-        <h2>Subscribe To Get <br>Newsletter</h2>
-        <form action="">
-            <input type="email" class="email" placeholder="Enter Email" required>
-            <input type="submit" value="Subscribe" class="btn">
-        </form>
-    </section>
+
 
     <!-- footer  -->
     <section class="footer">
         <a href="" class="logo">
-            <i class="bx bxs-movie"></i>Sanamio
+            <img src="./img/raidertix-high-resolution-logo-transparent (1).png" alt="">
         </a>
         <div class="social">
             <a href=""><i class='bx bxl-facebook'></i></a>
@@ -272,12 +267,13 @@
 
     <!-- Copyright  -->
     <div class="copyright">
-        <p>&#169; Sanamio All Right Reserved</p>
+        <p>&#169; RaiderTix All Right Reserved</p>
     </div>
 
 
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
-    <script src="main.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/search.js"></script>
 </body>
 </html>
