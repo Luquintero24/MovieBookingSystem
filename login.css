@@ -228,10 +228,6 @@ body {
   transition-duration: 0.2s;
 }
 
-/* For ring offset classes (like focus:ring-offset-2 focus:ring-offset-zinc-900) */
-.focus\:ring-offset-2 {
-  /* A helper class; usage requires an additional rule for the offset color */
-}
 .focus\:ring-offset-zinc-900:focus {
   /* Mimic ring + offset layering:
      - 1st shadow is the offset color (2px)
