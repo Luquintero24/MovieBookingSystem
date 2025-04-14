@@ -10,26 +10,27 @@
 
 <div class="iphone">
   <header class="header">
-    <h1>Checkout</h1>
+    <div><img style="height: 40px; width: auto; display: block; margin-left: auto; margin-right: auto;" 
+            src="./img/raidertix-high-resolution-logo-transparent (1).png" 
+            alt="RaiderTix Logo">
+    <h1>Checkout</h1></div>
   </header>
 
   <form action="https://httpbin.org/post" class="form" method="POST">
     <div>
-      <h2>Address</h2>
+      <h2>Cart Products</h2>
       <div class="card">
         <address>
-          Adam Johnson<br>
-          403 Oakland Ave Street, A city, Florida, 32104,<br>
-          United States of America
+          123
         </address>
       </div>
     </div>
 
     <fieldset>
-      <legend>Payment Method</legend>
+      <legend><h2>Payment Method</h2></legend>
       <div class="form__radio">
         <label for="visa">
-          <svg class="icon"><use xlink:href="#icon-visa" /></svg>Visa Payment
+          <svg class="icon"><use xlink:href="#icon-visa" /></svg>Venmo
         </label>
         <input checked id="visa" name="payment-method" type="radio">
       </div>
@@ -43,7 +44,7 @@
       
       <div class="form__radio">
         <label for="mastercard">
-          <svg class="icon"><use xlink:href="#icon-mastercard" /></svg>Master Card
+          <svg class="icon"><use xlink:href="#icon-mastercard" /></svg>Debit/Credit Card
         </label>
         <input id="mastercard" name="payment-method" type="radio">
       </div>
@@ -90,6 +91,18 @@
                 <span class="info-icon" title="3-digit code on the back of your card">i</span>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div id="paypal-details" style="display: none;">
+        <div class="card-form">
+          <div class="form-group">
+            <label for="paypal-email">PayPal Email</label>
+            <input id="paypal-email" type="email" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="paypal-name">Name (Optional)</label>
+            <input id="paypal-name" type="text" placeholder="e.g. John Doe" />
           </div>
         </div>
       </div>
@@ -205,20 +218,32 @@
 
 <!-- JavaScript -->
 <script>
-  const visaRadio = document.getElementById('visa');
-  const paypalRadio = document.getElementById('paypal');
-  const mastercardRadio = document.getElementById('mastercard');
-  const mastercardDetails = document.getElementById('mastercard-details');
+    const visaRadio = document.getElementById('visa');
+    const paypalRadio = document.getElementById('paypal');
+    const mastercardRadio = document.getElementById('mastercard');
 
-  function toggleCardFields() {
-    mastercardDetails.style.display = mastercardRadio.checked ? 'block' : 'none';
-  }
+    const mastercardDetails = document.getElementById('mastercard-details');
+    const paypalDetails = document.getElementById('paypal-details');
 
-  visaRadio.addEventListener('change', toggleCardFields);
-  paypalRadio.addEventListener('change', toggleCardFields);
-  mastercardRadio.addEventListener('change', toggleCardFields);
+    function togglePaymentFields() {
+    if (mastercardRadio.checked) {
+        mastercardDetails.style.display = 'block';
+        paypalDetails.style.display = 'none';
+    } else if (paypalRadio.checked) {
+        paypalDetails.style.display = 'block';
+        mastercardDetails.style.display = 'none';
+    } else {
+        mastercardDetails.style.display = 'none';
+        paypalDetails.style.display = 'none';
+    }
+    }
 
-  window.addEventListener('DOMContentLoaded', toggleCardFields);
+    visaRadio.addEventListener('change', togglePaymentFields);
+    paypalRadio.addEventListener('change', togglePaymentFields);
+    mastercardRadio.addEventListener('change', togglePaymentFields);
+
+    window.addEventListener('DOMContentLoaded', togglePaymentFields);
+
 </script>
 
 </body>

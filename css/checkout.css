@@ -47,7 +47,7 @@ html {
 }
 
 body {
-    background-color: var(--color-background);
+    background-color: var(--color-black);
     display: grid;
     font-family: var(--font-family-base);
     line-height: 1.5;
@@ -88,6 +88,7 @@ h2 {
     line-height: 1.2;
     margin-top: 0;
     margin-bottom: 0.5em;
+    color: var(--color-yellow-400);
 }
 
 legend {
@@ -174,7 +175,7 @@ tfoot {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--color-zinc-800);
+    background-color: #fff;
     border-radius: 1em;
     box-shadow: 0 0 1em rgba(0, 0, 0, 0.0625);
     padding: 1em;
@@ -184,6 +185,7 @@ tfoot {
     display: flex;
     align-items: center;
     gap: 1em;
+    color: #000;
 }
 
 .header {
@@ -201,7 +203,7 @@ tfoot {
 }
 
 .iphone {
-    background-image: linear-gradient(to bottom, #fff, #fff);
+    background-color: var(--color-zinc-900);
     border-radius: 2em;
     height: 812px;
     box-shadow: 0 0 1em rgba(0, 0, 0, 0.0625);
@@ -228,7 +230,7 @@ tfoot {
 .card-form .form-group label {
     font-weight: 500;
     margin-bottom: 0.5em;
-    color: var(--color-gray-300);
+    color: #fff;
 }
 
 .card-form input,
@@ -276,3 +278,27 @@ tfoot {
     font-size: 0.85em;
     cursor: help;
 }
+
+#paypal-details {
+    background-color: var(--color-input);
+    border-radius: var(--rounded-lg);
+    padding: var(--spacing-4);
+    margin-top: var(--spacing-4);
+    color: white;
+  }
+  
+  #paypal-details label {
+    color: var(--color-gray-300);
+    font-weight: 500;
+    margin-bottom: var(--spacing-2);
+  }
+  
+  #paypal-details input {
+    background-color: var(--color-dark);
+    border: none;
+    color: white;
+    padding: var(--spacing-2);
+    border-radius: var(--rounded-lg);
+    width: 100%;
+  }
+  
