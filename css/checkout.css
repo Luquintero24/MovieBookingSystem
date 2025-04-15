@@ -76,12 +76,15 @@ fieldset {
     padding: 0;
 }
 
+
 h1 {
-    font-size: var(--font-size-h1);
-    line-height: 1.2;
-    margin-top: 0;
-    margin-bottom: 1.5em;
-}
+    color: white;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem; /* or whatever size you prefer */
+    font-weight: 600;
+  }
+  
 
 h2 {
     font-size: var(--font-size-h2);
@@ -147,7 +150,7 @@ tfoot {
 
 .button:focus,
 .button:hover {
-    background-color: #e96363;
+    background-color: var(--color-yellow-300);
 }
 
 .button--full {
@@ -156,8 +159,8 @@ tfoot {
 
 .card {
     border-radius: 1em;
-    background-color: var(--color-primary);
-    color: #fff;
+    background-color: var(--color-zinc-800);
+    color: var(--color-gray-400);
     padding: 1em;
 }
 
@@ -194,18 +197,21 @@ tfoot {
     padding: 0.5em 1em;
 }
 
+
 .icon {
-    height: 1em;
-    width: 1em;
-    display: inline-block;
-    fill: currentColor;
+    width: 24px;
+    height: 24px;
     vertical-align: middle;
-}
+    margin-right: 10px;
+    overflow: visible; 
+    fill: currentColor;
+  }
+  
 
 .iphone {
     background-color: var(--color-zinc-900);
     border-radius: 2em;
-    height: 812px;
+    height: auto;
     box-shadow: 0 0 1em rgba(0, 0, 0, 0.0625);
     width: 450px;
     overflow: auto;
@@ -213,12 +219,15 @@ tfoot {
 }
 
 #mastercard-details {
-    display: none;
-    background: var(--color-zinc-900);
-    color: var(--color-gray-400);
-    border-radius: 1em;
-    padding: 1.5em;
-    margin-top: 1em;
+    margin-top: 1.5em;
+}
+
+#paypal-details {
+    margin-top: 1.5em;
+}
+
+#venmo-details {
+    margin-top: 1.5em;
 }
 
 .card-form .form-group {
@@ -279,26 +288,44 @@ tfoot {
     cursor: help;
 }
 
-#paypal-details {
-    background-color: var(--color-input);
-    border-radius: var(--rounded-lg);
-    padding: var(--spacing-4);
-    margin-top: var(--spacing-4);
-    color: white;
-  }
+
   
-  #paypal-details label {
-    color: var(--color-gray-300);
-    font-weight: 500;
-    margin-bottom: var(--spacing-2);
-  }
-  
-  #paypal-details input {
-    background-color: var(--color-dark);
-    border: none;
-    color: white;
-    padding: var(--spacing-2);
-    border-radius: var(--rounded-lg);
-    width: 100%;
-  }
-  
+/* Shared input styling for all payment forms */
+input[type="text"],
+input[type="email"],
+select {
+    
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background-color: #2a2a2a; /* matches your dark theme */
+  border: none;
+  color: white;
+  font-size: 1rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+select::placeholder {
+  color: #999;
+}
+
+/* When the input is focused (being typed into) */
+input[type="text"]:focus,
+input[type="email"]:focus,
+select:focus {
+  outline: 2px solid #fcd34d; /* optional: yellow outline on focus */
+  color: white;
+  background-color: #1f1f1f;
+}
+
+/* Fix for select dropdowns */
+select {
+  color: white;
+  background-color: #2a2a2a;
+}
+
+select:focus {
+  background-color: #1f1f1f;
+}
