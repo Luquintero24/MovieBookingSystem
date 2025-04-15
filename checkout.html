@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Checkout</title>
   <link rel="stylesheet" href="./css/checkout.css">
-
+  <script src="js/checkout.js" defer></script>
 </head>
 <body>
 
@@ -13,7 +13,9 @@
     <div><img style="height: 40px; width: auto; display: block; margin-left: auto; margin-right: auto;" 
             src="./img/raidertix-high-resolution-logo-transparent (1).png" 
             alt="RaiderTix Logo">
-    <h1>Checkout</h1></div>
+            <h1 >
+              Checkout
+            </h1></div>
   </header>
 
   <form action="https://httpbin.org/post" class="form" method="POST">
@@ -28,27 +30,31 @@
 
     <fieldset>
       <legend><h2>Payment Method</h2></legend>
-      <div class="form__radio">
-        <label for="visa">
-          <svg class="icon"><use xlink:href="#icon-visa" /></svg>Venmo
-        </label>
-        <input checked id="visa" name="payment-method" type="radio">
+      <div class="form__radios">
+        <div class="form__radio">
+          <label for="venmo">
+            <svg class="icon venmo-icon">
+              <use xlink:href="#icon-venmo"></use>
+            </svg>            
+            Venmo
+          </label>
+          <input checked id="venmo" name="payment-method" type="radio">
+        </div>
+        
+        <div class="form__radio">
+          <label for="paypal">
+            <svg class="icon"><use xlink:href="#icon-paypal" /></svg>PayPal
+          </label>
+          <input id="paypal" name="payment-method" type="radio">
+        </div>
+        
+        <div class="form__radio">
+          <label for="mastercard">
+            <svg class="icon"><use xlink:href="#icon-mastercard" /></svg>Debit/Credit Card
+          </label>
+          <input id="mastercard" name="payment-method" type="radio">
+        </div>
       </div>
-      
-      <div class="form__radio">
-        <label for="paypal">
-          <svg class="icon"><use xlink:href="#icon-paypal" /></svg>PayPal
-        </label>
-        <input id="paypal" name="payment-method" type="radio">
-      </div>
-      
-      <div class="form__radio">
-        <label for="mastercard">
-          <svg class="icon"><use xlink:href="#icon-mastercard" /></svg>Debit/Credit Card
-        </label>
-        <input id="mastercard" name="payment-method" type="radio">
-      </div>
-      
 
       <!-- MasterCard extra fields -->
       <div id="mastercard-details">
@@ -103,6 +109,18 @@
           <div class="form-group">
             <label for="paypal-name">Name (Optional)</label>
             <input id="paypal-name" type="text" placeholder="e.g. John Doe" />
+          </div>
+        </div>
+      </div>
+      <div id="venmo-details" style="display: none;">
+        <div class="card-form">
+          <div class="form-group">
+            <label for="venmo-username">Venmo Username or Phone Number</label>
+            <input id="venmo-username" type="text" placeholder="@username or (555) 555-5555" required />
+          </div>
+          <div class="form-group">
+            <label for="venmo-note">Payment Note</label>
+            <input id="venmo-note" type="text" placeholder="e.g. Movie Tickets" />
           </div>
         </div>
       </div>
@@ -194,57 +212,12 @@
         <path d="m140.049 466.4 24.8 24.8h14.4l-36.8-36.8z" />
       </g>
     </symbol>
-  
-    <symbol id="icon-visa" viewBox="0 0 504 504">
-      <path d="m184.8 324.4 25.6-144h40l-24.8 144z" fill="#3c58bf" />
-      <path d="m184.8 324.4 32.8-144h32.8l-24.8 144z" fill="#293688" />
-      <path d="m370.4 182c-8-3.2-20.8-6.4-36.8-6.4-40 0-68.8 20-68.8 48.8 0 21.6 20 32.8 36 40s20.8 12 20.8 18.4c0 9.6-12.8 14.4-24 14.4-16 0-24.8-2.4-38.4-8l-5.6-2.4-5.6 32.8c9.6 4 27.2 8 45.6 8 42.4 0 70.4-20 70.4-50.4 0-16.8-10.4-29.6-34.4-40-14.4-7.2-23.2-11.2-23.2-18.4 0-6.4 7.2-12.8 23.2-12.8 13.6 0 23.2 2.4 30.4 5.6l4 1.6z" fill="#3c58bf" />
-      <path d="m370.4 182c-8-3.2-20.8-6.4-36.8-6.4-40 0-61.6 20-61.6 48.8 0 21.6 12.8 32.8 28.8 40s20.8 12 20.8 18.4c0 9.6-12.8 14.4-24 14.4-16 0-24.8-2.4-38.4-8l-5.6-2.4-5.6 32.8c9.6 4 27.2 8 45.6 8 42.4 0 70.4-20 70.4-50.4 0-16.8-10.4-29.6-34.4-40-14.4-7.2-23.2-11.2-23.2-18.4 0-6.4 7.2-12.8 23.2-12.8 13.6 0 23.2 2.4 30.4 5.6l4 1.6z" fill="#293688" />
-      <path d="m439.2 180.4c-9.6 0-16.8.8-20.8 10.4l-60 133.6h43.2l8-24h51.2l4.8 24h38.4l-33.6-144zm-18.4 96c2.4-7.2 16-42.4 16-42.4s3.2-8.8 5.6-14.4l2.4 13.6s8 36 9.6 44h-33.6z" fill="#3c58bf" />
-      <path d="m448.8 180.4c-9.6 0-16.8.8-20.8 10.4l-69.6 133.6h43.2l8-24h51.2l4.8 24h38.4l-33.6-144zm-28 96c3.2-8 16-42.4 16-42.4s3.2-8.8 5.6-14.4l2.4 13.6s8 36 9.6 44h-33.6z" fill="#293688" />
-      <path d="m111.2 281.2-4-20.8c-7.2-24-30.4-50.4-56-63.2l36 128h43.2l64.8-144h-43.2z" fill="#3c58bf" />
-      <path d="m111.2 281.2-4-20.8c-7.2-24-30.4-50.4-56-63.2l36 128h43.2l64.8-144h-35.2z" fill="#293688" />
-      <path d="m0 180.4 7.2 1.6c51.2 12 86.4 42.4 100 78.4l-14.4-68c-2.4-9.6-9.6-12-18.4-12z" fill="#ffbc00" />
-      <path d="m0 180.4c51.2 12 93.6 43.2 107.2 79.2l-13.6-56.8c-2.4-9.6-10.4-15.2-19.2-15.2z" fill="#f7981d" />
-      <path d="m0 180.4c51.2 12 93.6 43.2 107.2 79.2l-9.6-31.2c-2.4-9.6-5.6-19.2-16.8-23.2z" fill="#ed7c00" />
-      <g fill="#051244">
-        <path d="m151.2 276.4-27.2-27.2-12.8 30.4-3.2-20c-7.2-24-30.4-50.4-56-63.2l36 128h43.2z" />
-        <path d="m225.6 324.4-34.4-35.2-6.4 35.2z" />
-        <path d="m317.6 274.8c3.2 3.2 4.8 5.6 4 8.8 0 9.6-12.8 14.4-24 14.4-16 0-24.8-2.4-38.4-8l-5.6-2.4-5.6 32.8c9.6 4 27.2 8 45.6 8 25.6 0 46.4-7.2 58.4-20z" />
-        <path d="m364 324.4h37.6l8-24h51.2l4.8 24h38.4l-13.6-58.4-48-46.4 2.4 12.8s8 36 9.6 44h-33.6c3.2-8 16-42.4 16-42.4s3.2-8.8 5.6-14.4" />
-      </g>
+    <symbol id="icon-venmo" viewBox="0 0 512 512">
+      <rect width="512" height="512" rx="15%" fill="#3396cd" />
+      <path d="m381.4 105.3c11 18.1 15.9 36.7 15.9 60.3 0 75.1-64.1 172.7-116.2 241.2h-118.8l-47.6-285 104.1-9.9 25.3 202.8c23.5-38.4 52.6-98.7 52.6-139.7 0-22.5-3.9-37.8-9.9-50.4z" fill="#fff" />
     </symbol>
+     
+    
   </svg>
-
-<!-- JavaScript -->
-<script>
-    const visaRadio = document.getElementById('visa');
-    const paypalRadio = document.getElementById('paypal');
-    const mastercardRadio = document.getElementById('mastercard');
-
-    const mastercardDetails = document.getElementById('mastercard-details');
-    const paypalDetails = document.getElementById('paypal-details');
-
-    function togglePaymentFields() {
-    if (mastercardRadio.checked) {
-        mastercardDetails.style.display = 'block';
-        paypalDetails.style.display = 'none';
-    } else if (paypalRadio.checked) {
-        paypalDetails.style.display = 'block';
-        mastercardDetails.style.display = 'none';
-    } else {
-        mastercardDetails.style.display = 'none';
-        paypalDetails.style.display = 'none';
-    }
-    }
-
-    visaRadio.addEventListener('change', togglePaymentFields);
-    paypalRadio.addEventListener('change', togglePaymentFields);
-    mastercardRadio.addEventListener('change', togglePaymentFields);
-
-    window.addEventListener('DOMContentLoaded', togglePaymentFields);
-
-</script>
-
 </body>
 </html>
