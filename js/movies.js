@@ -17,6 +17,86 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+const FEATURED_TITLES = [
+  "The Avengers",
+  "Avengers: Infinity War",
+  "Moana 2",
+  "Captain America: Brave New World",
+  "Iron Man"
+];
+
+// LOAD FEATURED MOVIES
+async function loadFeaturedMovies() {
+  try {
+    const featuredEl = document.getElementById("featuredSlides");
+    if (!featuredEl) {
+      console.warn("No #featuredSlides element found for home slider");
+      return;
+    }
+
+    featuredEl.innerHTML = "";  // Clear any placeholder
+
+    // Firestore supports up to 10 items in an 'in' query
+    const q = query(
+      collection(db, "movies"),
+      where("title", "in", FEATURED_TITLES)
+    );
+    const snapshot = await getDocs(q);
+
+    // Build a slide (.swiper-slide) for each doc
+    snapshot.forEach((docSnap) => {
+      const movie = docSnap.data(); // e.g. { title, backdropUrl, synopsis, status, etc. }
+
+      // We'll replicate the structure: .swiper-slide.container
+      const slide = document.createElement("div");
+      slide.classList.add("swiper-slide", "container");
+      
+      // Line-break for long title
+      function formatTitle(title) {
+        const parts = title.split(/[:]/); 
+        if (parts.length > 1) {
+          // first part + <br> + the rest (trim to remove leading space)
+          return `${parts[0]}:<br>${parts.slice(1).join(':').trim()}`;
+        }
+        return title;
+      }
+
+      slide.innerHTML = `
+        <img src="${movie.backdropUrl}" alt="${movie.title}">
+        <div class="home-text">
+          <span>Featured Movie</span>
+          <h1>${formatTitle(movie.title)}</h1>
+          <a href="#" class="btn">Book Now</a>
+          <a href="#" class="play"><i class='bx bx-play'></i></a>
+        </div>
+      `;
+
+      featuredEl.appendChild(slide);
+    });
+
+    // After adding all slides, re-init the Swiper
+    initHomeSwiper();
+  } catch (err) {
+    console.error("Error loading featured movies:", err);
+  }
+}
+
+//“Home” Swiper
+function initHomeSwiper() {
+  new Swiper(".home", {
+    spaceBetween: 30,
+    centeredSlides: true,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+  });
+}
+
 // LOAD CURRENTLY SHOWING MOVIES
 async function loadNowShowing() {
   try {
@@ -126,6 +206,6 @@ function initUpcomingSwiper() {
   });
 }
 
-// Call both
+loadFeaturedMovies();
 loadNowShowing();
 loadUpcoming();

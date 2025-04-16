@@ -23,7 +23,7 @@
         <ul class="navbar">
             <li><a href="#home" class="home-active">Home</a></li>
             <li><a href="#movies">Browse Full Catalog</a></li>
-            <li><a href="#coming">Upcoming films</a></li>
+            <li><a href="#coming">Upcoming Films</a></li>
         </ul>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search movies...">
@@ -33,54 +33,10 @@
 
     <!-- Home  -->
     <section class="home swiper" id="home">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide container">
-                <img src="./img/home1.jpg" alt="">
-                <div class="home-text">
-                    <span>Marvel Universe</span>
-                    <h1>Guardians of the Galaxy <br>Volume 2</h1>
-                    <a href="" class="btn">Book Now</a>
-                    <a href="" class="play">
-                        <i class='bx bx-play' ></i>
-                    </a>
-                </div>
-            </div>
-            <div class="swiper-slide container">
-                <img src="./img/home2.png" alt="">
-                <div class="home-text">
-                    <span>Marvel Universe</span>
-                    <h1>Thor: <br>Love and Thunder</h1>
-                    <a href="" class="btn">Book Now</a>
-                    <a href="" class="play">
-                        <i class='bx bx-play' ></i>
-                    </a>
-                </div>
-            </div>
-            <div class="swiper-slide container">
-                <img src="./img/home3.jpg" alt="">
-                <div class="home-text">
-                    <span>Marvel Universe</span>
-                    <h1>Spider-Man <br>No Way Home</h1>
-                    <a href="" class="btn">Book Now</a>
-                    <a href="" class="play">
-                        <i class='bx bx-play' ></i>
-                    </a>
-                </div>
-            </div>
-            <div class="swiper-slide container">
-                <img src="./img/home4.png" alt="">
-                <div class="home-text">
-                    <span>Marvel Universe</span>
-                    <h1>Avengers: <br>End Game</h1>
-                    <a href="" class="btn">Book Now</a>
-                    <a href="" class="play">
-                        <i class='bx bx-play' ></i>
-                    </a>
-                </div>
-            </div>
-            
-          </div>
-          <div class="swiper-pagination"></div>
+        <div class="swiper-wrapper" id="featuredSlides">
+            <!-- Dynamically filled by JS with featured movies -->
+        </div>
+        <div class="swiper-pagination"></div>
     </section>
 
     <!-- Movies  -->
@@ -92,7 +48,7 @@
         </div>
     </div>
 
-    <!-- coming  -->
+    <!-- Coming  -->
     <section class="coming" id="coming">
         <h2 class="heading">Coming Soon</h2>
         <!-- coming contanier  -->
@@ -103,8 +59,7 @@
         </div>
     </section>
 
-
-    <!-- footer  -->
+    <!-- Footer  -->
     <section class="footer">
         <a href="" class="logo">
             <img src="./img/raidertix-high-resolution-logo-transparent (1).png" alt="">
