@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add to Cart</title>
+  <link rel="stylesheet" href="css/cart.css" />
+  <script type="module" src="js/cart.js"></script>
+</head>
+<body>
+  <div class="iphone">
+    <header class="header">
+      <img src="./img/raidertix-high-resolution-logo-transparent (1).png" alt="RaiderTix Logo" class="logo" />
+      <h1>Book Your Ticket</h1>
+    </header>
+
+    <form class="form">
+      <div class="card">
+        <p><strong>🎬 Movie:</strong> Warfare</p>
+        <p><strong>📍 Theater:</strong> Raider Cinema</p>
+        <p><strong>🕒 Showtime:</strong> April 16, 2025 at 7:30 PM</p>
+      </div>
+
+      <div class="form-group">
+        <label for="ticketCount">🎟️ Number of Tickets (Max 10)</label>
+        <input type="number" id="ticketCount" name="ticketCount" min="1" max="10" value="1">
+      </div>
+
+      <div class="card">
+        <h2>Summary</h2>
+        <p><strong>Ticket Price:</strong> $10.00</p>
+        <p><strong>Subtotal:</strong> <span id="subtotal">$10.00</span></p>
+      </div>
+
+      <button type="button" class="button button--full" id="checkoutBtn">
+        Continue to Checkout →
+      </button>
+    </form>
+  </div>
+</body>
+</html>
