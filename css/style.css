@@ -281,6 +281,14 @@ section{
     color: var(--bg-color);
 }
 
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+  
+
 /* responsive  */
 @media (max-width: 1080px){
     .home-text{

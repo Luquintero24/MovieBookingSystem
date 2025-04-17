@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RaiderTix – Movie Details</title>
+    <link rel="stylesheet" href="./css/testing.css" />
+  </head>
+
+  <body class="page">
+    <!-- Navbar  -->
+    <header>
+      <a href="index.html" class="logo">
+        <img
+          src="./img/raidertix-high-resolution-logo-transparent (1).png"
+          alt=""
+        />
+      </a>
+      <div class="bx bx-menu" id="menu-icon"></div>
+
+      <!-- menu  -->
+      <ul class="navbar">
+        <li><a href="index.html" class="home-active">Home</a></li>
+        <li><a href="index.html">Browse Full Catalog</a></li>
+        <li><a href="index.html">Upcoming Films</a></li>
+      </ul>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search movies..." />
+      </div>
+      <a href="login.html" class="btn">Sign In</a>
+    </header>
+
+    <!-- Movie Details -->
+    <section class="movie-details">
+      <!-- Banner -->
+      <div class="movie-banner"></div>
+
+      <!-- Info -->
+      <div class="container movie-info-wrapper">
+        <div class="poster-container">
+          <img
+            src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=800"
+            alt="Dr. Strange Poster"
+            class="movie-poster"
+          />
+        </div>
+        <div class="movie-info">
+          <h1 class="movie-title">Dr. Strange</h1>
+          <div class="movie-meta">
+            <span>2023</span>
+            <span>•</span>
+            <span>PG‑13</span>
+            <span>•</span>
+            <span>120 min</span>
+            <span>•</span>
+            <span>Action, Adventure, Fantasy</span>
+          </div>
+          <p class="movie-description">
+            Dr. Stephen Strange’s life changes forever after a car accident robs
+            him of the use of his hands. When traditional medicine fails him, he
+            looks for healing—and hope—in a mysterious enclave…
+          </p>
+
+          <!-- Cast -->
+          <div class="cast-section">
+            <h2>Cast</h2>
+            <div class="cast-list">
+              <div class="cast-member">
+                <img
+                  src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200"
+                  alt=""
+                  class="cast-photo"
+                />
+                <p class="cast-name">Benedict Cumberbatch</p>
+                <p class="cast-role">Dr. Strange</p>
+              </div>
+              <!-- etc. -->
+            </div>
+          </div>
+
+          <!-- Theater Search -->
+          <div class="theater-search">
+            <h2>Find Theaters</h2>
+            <div class="theater-search-inputs">
+              <input
+                type="text"
+                id="zipcode"
+                placeholder="Enter ZIP code"
+                class="search-input"
+              />
+              <button id="searchTheaters" class="btn btn-primary">
+                Search
+              </button>
+            </div>
+          </div>
+
+          <!-- Showtimes -->
+          <div class="showtimes-section">
+            <div class="showtimes-header">
+              <h2>Showtimes</h2>
+              <select id="dateSelect" class="search-input date-select">
+                <option value="">Select Date</option>
+              </select>
+            </div>
+            <div class="theater-list">
+              <div class="theater">
+                <div class="theater-header">
+                  <div>
+                    <h3 class="theater-name">AMC Empire 25</h3>
+                    <p class="theater-address">
+                      234 W 42nd St, New York, NY 10036
+                    </p>
+                    <div class="theater-features">
+                      <span>★ IMAX</span>
+                      <span>Dolby Cinema</span>
+                      <span>Wheelchair Accessible</span>
+                    </div>
+                  </div>
+                  <a href="#" class="theater-info-link">View Theater Info</a>
+                </div>
+                <div class="showtime-buttons">
+                  <button class="btn-time">10:30 AM</button>
+                  <button class="btn-time">1:45 PM</button>
+                  <button class="btn-time">4:30 PM</button>
+                  <button class="btn-time">7:15 PM</button>
+                </div>
+              </div>
+              <!-- Theater 2… -->
+            </div>
+          </div>
+
+          <!-- Reviews -->
+          <div class="reviews-section">
+            <h2>Reviews</h2>
+
+            <form class="review-form">
+              <div class="rating-input">
+                <input type="radio" id="star5" name="rating" value="5" />
+                <label for="star5">★</label>
+
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4">★</label>
+
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3">★</label>
+
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2">★</label>
+
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1">★</label>
+              </div>
+
+              <textarea
+                placeholder="Write your review…"
+                class="review-textarea"
+              ></textarea>
+              <button type="submit" class="btn btn-primary">Post Review</button>
+            </form>
+
+            <div class="reviews-list">
+              <div class="review">
+                <div class="review-header">
+                  <div class="avatar">JD</div>
+                  <div class="reviewer-info">
+                    <h4 class="reviewer-name">John Doe</h4>
+                    <div class="review-meta">
+                      <div class="stars">★★★★★</div>
+                      <span class="review-time">2 hours ago</span>
+                    </div>
+                  </div>
+                </div>
+                <p class="review-text">
+                  Amazing movie! The visual effects were stunning…
+                </p>
+              </div>
+              <!-- more reviews… -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container footer-grid">
+        <!-- Company Info, Quick Links, Support, Newsletter -->
+        <!-- copy your footer content here, just swap utility classes for semantic ones -->
+      </div>
+      <div class="bottom-bar">
+        <p>© 2024 RaiderTix. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#">Accessibility</a>
+          <a href="#">Cookie Policy</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

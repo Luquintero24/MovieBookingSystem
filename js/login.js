@@ -5,9 +5,6 @@ import {  getAuth,
           browseLocalPersistence, 
           signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyC7UQTcpoKETfZZT2LZ0AT7mh_jaSZthGA",
@@ -23,28 +20,22 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 
-
 const submit = document.getElementById('submit');
 submit.addEventListener("click", function(event) {
   event.preventDefault();
 
-  //inputs
-  const email= document.getElementById('email').value;
-  const password = document.getElementById('password').value
+  // Get user inputs
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
-
-  setPersistence(auth, browserLocalPersistence)
-    .then(() => {
-      signInWithEmailAndPassword(auth, email, password); // ← NOT returned
-    })
+  // Firebase login
+  signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Login successful
       const user = userCredential.user;
 
-      //OPTIONAL: it saves the user to local storage
-      localStorage.setItem("user", JSON.stringify(user));
-
-      window.location.href = "user-profile.html";
+      // ✅ Redirect to main page
+      window.location.href = "index.html";
     })
     .catch((error) => {
       const errorMessage = error.message;
