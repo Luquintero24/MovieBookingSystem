@@ -29,7 +29,11 @@ submit.addEventListener("click", function(event) {
   const password = document.getElementById('password').value;
 
   // Firebase login
-  signInWithEmailAndPassword(auth, email, password)
+  
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      signInWithEmailAndPassword(auth, email, password); // ← NOT returned
+    })
     .then((userCredential) => {
       // Login successful
       const user = userCredential.user;

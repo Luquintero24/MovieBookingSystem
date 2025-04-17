@@ -38,7 +38,7 @@ onAuthStateChanged(auth, async (user) => {
 		document.getElementById("address").value = data.address || "";
 		document.getElementById("city").value = data.city || "";
 		document.getElementById("state").value = data.state || "";
-		document.getElementById("zip").value = data.zip || "";
+		document.getElementById("zip").value = data.zipCode || "";
 	}
 
 	document.getElementById("profile-form").addEventListener("submit", async (e) => {
