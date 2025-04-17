@@ -1,17 +1,23 @@
 // Import from Firebase CDN (ES module style):
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 import Swiper from "https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.esm.browser.min.js";
 
 // Firebase config
 const firebaseConfig = {
-    apiKey: "AIzaSyC7UQTcpoKETfZZT2LZ0AT7mh_jaSZthGA",
-    authDomain: "moviebooking-20705.firebaseapp.com",
-    projectId: "moviebooking-20705",
-    storageBucket: "moviebooking-20705.appspot.com",
-    messagingSenderId: "230927628782",
-    appId: "1:230927628782:web:5460063cce3d8d55e8f6ff"
-  };
+  apiKey: "AIzaSyC7UQTcpoKETfZZT2LZ0AT7mh_jaSZthGA",
+  authDomain: "moviebooking-20705.firebaseapp.com",
+  projectId: "moviebooking-20705",
+  storageBucket: "moviebooking-20705.appspot.com",
+  messagingSenderId: "230927628782",
+  appId: "1:230927628782:web:5460063cce3d8d55e8f6ff",
+};
 
 // Initialize Firebase & Firestore
 const app = initializeApp(firebaseConfig);
@@ -22,7 +28,7 @@ const FEATURED_TITLES = [
   "Avengers: Infinity War",
   "Moana 2",
   "Captain America: Brave New World",
-  "Iron Man"
+  "Iron Man",
 ];
 
 // LOAD FEATURED MOVIES
@@ -34,7 +40,7 @@ async function loadFeaturedMovies() {
       return;
     }
 
-    featuredEl.innerHTML = "";  // Clear any placeholder
+    featuredEl.innerHTML = ""; // Clear any placeholder
 
     // Firestore supports up to 10 items in an 'in' query
     const q = query(
@@ -50,13 +56,13 @@ async function loadFeaturedMovies() {
       // We'll replicate the structure: .swiper-slide.container
       const slide = document.createElement("div");
       slide.classList.add("swiper-slide", "container");
-      
+
       // Line-break for long title
       function formatTitle(title) {
-        const parts = title.split(/[:]/); 
+        const parts = title.split(/[:]/);
         if (parts.length > 1) {
           // first part + <br> + the rest (trim to remove leading space)
-          return `${parts[0]}:<br>${parts.slice(1).join(':').trim()}`;
+          return `${parts[0]}:<br>${parts.slice(1).join(":").trim()}`;
         }
         return title;
       }
@@ -114,7 +120,7 @@ async function loadNowShowing() {
 
     // Loop through each doc and create a .box element
     snapshot.forEach((doc) => {
-      const movie = doc.data(); 
+      const movie = doc.data();
       // e.g. { title, runtime, genre, posterUrl, ... }
 
       // Create the box div
@@ -135,14 +141,12 @@ async function loadNowShowing() {
 
       // Append to container
       moviesContainer.appendChild(boxDiv);
-      
-      boxDiv.dataset.id = doc.id;          // store Firestore doc‑id
+
+      boxDiv.dataset.id = doc.id; // store Firestore doc‑id
       boxDiv.addEventListener("click", () => {
-        window.location.href = `testing.html?id=${doc.id}`;
+        window.location.href = `movie-details.html?id=${doc.id}`;
       });
-
     });
-
   } catch (err) {
     console.error("Error loading now_showing movies:", err);
   }
@@ -152,7 +156,9 @@ async function loadNowShowing() {
 async function loadUpcoming() {
   try {
     // Assume .coming-container .swiper-wrapper is where upcoming slides go
-    const upcomingContainer = document.querySelector(".coming-container .swiper-wrapper");
+    const upcomingContainer = document.querySelector(
+      ".coming-container .swiper-wrapper"
+    );
     if (!upcomingContainer) {
       console.warn("No .coming-container .swiper-wrapper found in DOM");
       return;
@@ -161,7 +167,10 @@ async function loadUpcoming() {
     upcomingContainer.innerHTML = "";
 
     // Query movies where status == "upcoming"
-    const q = query(collection(db, "movies"), where("status", "==", "upcoming"));
+    const q = query(
+      collection(db, "movies"),
+      where("status", "==", "upcoming")
+    );
     const snapshot = await getDocs(q);
 
     snapshot.forEach((doc) => {
@@ -169,7 +178,7 @@ async function loadUpcoming() {
 
       const slideDiv = document.createElement("div");
       slideDiv.classList.add("swiper-slide", "box");
-      
+
       // Only first genre
       const firstGenre = movie.genre[0];
 
@@ -187,7 +196,6 @@ async function loadUpcoming() {
     // Re-initialize Swiper if needed
     // e.g.: new Swiper('.coming-container.swiper', { ... });
     initUpcomingSwiper();
-
   } catch (err) {
     console.error("Error loading upcoming movies:", err);
   }

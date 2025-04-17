@@ -1,74 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 body {
-    background-color: #000;
-    font-family: 'Poppins', sans-serif;
-    color: white;
-    display: flex;
-    justify-content: center;
-    padding: 2em;
-  }
-  
-  .iphone {
-    background-color: #18181b;
-    border-radius: 2em;
-    padding: 2em;
-    max-width: 450px;
-    width: 100%;
-    box-shadow: 0 0 1em rgba(0,0,0,0.2);
-  }
-  
-  .logo {
-    height: 40px;
-    display: block;
-    margin: 0 auto 1em;
-  }
-  
-  h1 {
-    color: white;
-    text-align: center;
-    margin-bottom: 1em;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5em;
-  }
-  
-  .card {
-    background-color: #27272a;
-    padding: 1em;
-    border-radius: 1em;
-    color: #d1d5db;
-  }
-  
-  label {
-    color: #fcd34d;
-    font-weight: 500;
-  }
-  
-  input[type="number"] {
-    background-color: #27272a;
-    color: white;
-    border: none;
-    padding: 0.5em;
-    border-radius: 0.5em;
-    width: 100%;
-    margin-top: 0.5em;
-  }
-  
-  .button {
-    background-color: #FFBF00;
-    color: black;
-    border: none;
-    border-radius: 999em;
-    padding: 0.75em;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  .button:hover {
-    background-color: #fcd34d;
-  }
-  
+  background-color: #000;
+  font-family: "Poppins", sans-serif;
+  color: white;
+  display: flex;
+  justify-content: center;
+  padding: 2em;
+}
+
+.iphone {
+  background-color: #18181b;
+  border-radius: 2em;
+  padding: 2em;
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 0 1em rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  height: 40px;
+  display: block;
+  margin: 0 auto 1em;
+}
+
+h1 {
+  color: white;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
+
+.card {
+  background-color: #27272a;
+  padding: 1em;
+  border-radius: 1em;
+  color: #d1d5db;
+}
+
+label {
+  color: #fcd34d;
+  font-weight: 500;
+}
+
+input[type="number"] {
+  background-color: #27272a;
+  color: white;
+  border: none;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  width: 100%;
+  margin-top: 0.5em;
+}
+
+.button {
+  background-color: #ffbf00;
+  color: black;
+  border: none;
+  border-radius: 999em;
+  padding: 0.75em;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.button:hover {
+  background-color: #fcd34d;
+}

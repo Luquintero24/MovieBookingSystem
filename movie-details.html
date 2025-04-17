@@ -5,13 +5,13 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RaiderTix – Movie Details</title>
-    <link rel="stylesheet" href="./css/testing.css" />
+    <link rel="stylesheet" href="./css/movie-details.css" />
   </head>
 
   <body class="page">
     <!-- Navbar  -->
     <header>
-      <a href="index.html" class="logo">
+      <a href="./index.html" class="logo">
         <img
           src="./img/raidertix-high-resolution-logo-transparent (1).png"
           alt=""
@@ -21,14 +21,65 @@
 
       <!-- menu  -->
       <ul class="navbar">
-        <li><a href="index.html" class="home-active">Home</a></li>
-        <li><a href="index.html">Browse Full Catalog</a></li>
-        <li><a href="index.html">Upcoming Films</a></li>
+        <li><a href="./index.html" class="home-active">Home</a></li>
+        <li><a href="./index.html">Browse Full Catalog</a></li>
+        <li><a href="./index.html">Upcoming Films</a></li>
       </ul>
       <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Search movies..." />
       </div>
-      <a href="login.html" class="btn">Sign In</a>
+      <!-- Sign In Button (for signed out users) -->
+      <a href="login.html" class="btn" id="signInBtn" style="margin-left: 16px"
+        >Sign In</a
+      >
+
+      <!-- User Dropdown (for signed in users) -->
+      <div
+        class="user-info"
+        style="display: none; position: relative; margin-left: 16px"
+      >
+        <div
+          id="userToggle"
+          style="display: flex; align-items: center; gap: 8px; cursor: pointer"
+        >
+          <i class="bx bxs-user" style="color: white; font-size: 24px"></i>
+          <span id="username" style="color: white; font-weight: 500"
+            >Hi, User!</span
+          >
+          <i class="bx bx-chevron-down" style="color: white"></i>
+        </div>
+        <div
+          id="userDropdown"
+          style="
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #18181b;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            margin-top: 8px;
+            z-index: 100;
+            width: 120px;
+          "
+        >
+          <button
+            id="signOutBtn"
+            style="
+              background: transparent;
+              color: #fcd34d;
+              border: none;
+              width: 100%;
+              padding: 10px;
+              text-align: left;
+              cursor: pointer;
+              font-weight: 500;
+            "
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
     </header>
 
     <!-- Movie Details -->
@@ -199,5 +250,7 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script src="js/search.js"></script>
+    <script type="module" src="js/authState.js" defer></script>
   </body>
 </html>
