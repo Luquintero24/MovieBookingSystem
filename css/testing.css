@@ -1,0 +1,500 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   ROOT: font‑sizes & color palette                                        */
+/* ───────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Font Sizes */
+  --fs-base: 1rem; /* 16px */
+  --fs-sm: 0.875rem; /* 14px */
+  --fs-md: 1rem; /* 14px */
+  --fs-lg: 1.125rem; /* 18px */
+  --fs-xl: 1.5rem; /* 24px */
+  --fs-2xl: 2.25rem; /* 36px */
+
+  /* Color Palette */
+  --c-bg: #000;
+  --c-text: #fff;
+  --c-gray-900: #18181b;
+  --c-gray-800: #27272a;
+  --c-gray-700: #3f3f46;
+  --c-gray-400: #9ca3af;
+  --c-gray-300: #d1d5db;
+  --c-yellow-400: #ffbf00;
+  --c-yellow-300: #fcd34d;
+}
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   RESET & GLOBALS                                                        */
+/* ───────────────────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 100%; /* 16px */
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: var(--c-bg);
+  color: var(--c-text);
+  line-height: 1.5;
+  font-size: var(--fs-base);
+}
+
+h2 {
+  font-weight: 500;
+  font-size: var(--fs-lg);
+}
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   CONTAINER                                                              */
+/* ───────────────────────────────────────────────────────────────────────── */
+.container {
+  max-width: 75rem; /* 1280px */
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   NAVBAR                                                                 */
+/* ───────────────────────────────────────────────────────────────────────── */
+header{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 50px;
+    transition: 0.5s;
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.70) 0%,             /* solid dark */
+        rgba(0,0,0,0.60) 30%,
+        rgba(0,0,0,0.30) 60%,
+        rgba(0,0,0,0.0) 100%             /* fully transparent */
+    );   
+}
+header.shadow{
+    background: rgba(55, 55, 55, 0.95);      /* or any solid colour */
+    backdrop-filter:none;              /* optional */
+}
+header.shadow .navbar a, header.shadow .logo{
+    color: var(--bg-color);        
+}
+.logo{
+    font-size: 1.1rem;
+    font-weight: 600;
+    align-items: center;
+    color: var(--bg-color);
+    display: flex;
+    column-gap: 0.5rem;
+}
+.logo img {
+    height: 100%;
+    width: auto;
+    max-height: 40px; /* ensures the logo doesn't get too big */
+}
+.bx{
+    color: var(--main-color);
+}
+.navbar{
+    display: flex;
+    column-gap: 5rem;
+}
+.navbar li{
+    position: relative;
+}
+.navbar a{
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--bg-color);
+}
+.navbar a::after{
+    content: '';
+    width: 0;
+    height: 2px;
+    background: var(--main-color);
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    transition: 0.4s all linear;
+}
+.navbar a:hover::after,
+.navbar .home-active::after{
+    width: 100%;
+}
+.search-bar {
+    margin-left: 1rem;
+}
+.search-bar input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 0.9rem;
+}
+#menu-icon{
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000001;
+    display: none;
+}
+.btn{
+    padding: 0.7rem 1.4rem;
+    background: var(--c-yellow-400);
+    color: var(--c-bg);
+    font-weight: 500;
+    border-radius: 0.5rem; 
+}
+.btn:hover{
+    background: #fcd34d;
+}
+
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   FORM CONTROLS + BUTTON                                                 */
+/* ───────────────────────────────────────────────────────────────────────── */
+.search-input {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: var(--c-gray-800);
+  border: 1px solid var(--c-gray-700);
+  color: var(--c-text);
+  outline: none;
+}
+.search-input:focus {
+  outline: 2px solid var(--c-yellow-400);
+}
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: var(--fs-md);
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+.btn-primary {
+  background: var(--c-yellow-400);
+  color: var(--c-bg);
+}
+.btn-primary:hover {
+  background: var(--c-yellow-300);
+}
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   BANNER                                                                 */
+/* ───────────────────────────────────────────────────────────────────────── */
+.movie-banner {
+  position: relative;
+  height: 500px;
+  background: url("https://wallpapercave.com/wp/wp4625632.jpg") center/cover
+    no-repeat;
+}
+.movie-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--c-bg), transparent);
+}
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   MOVIE INFO WRAPPER                                                     */
+/* ───────────────────────────────────────────────────────────────────────── */
+.movie-info-wrapper {
+  display: flex;
+  gap: 32px;
+  position: relative;
+  top: -150px;
+}
+.poster-container {
+  flex-shrink: 0;
+  width: 320px;
+}
+.movie-poster {
+  width: 100%;
+  height: 450px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+}
+.movie-info {
+  flex: 1;
+  margin-top: 128px;
+}
+.movie-title {
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.movie-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-sm);
+  color: var(--c-gray-400);
+  margin-bottom: 24px;
+}
+.movie-description {
+  font-size: var(--fs-md);
+  color: var(--c-gray-300);
+  margin-bottom: 32px;
+}
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   CAST                                                                   */
+/* ───────────────────────────────────────────────────────────────────────── */
+.cast-section h2 {
+  margin-bottom: 16px;
+}
+.cast-list {
+  display: flex;
+  gap: 24px;
+}
+.cast-member {
+  text-align: center;
+}
+.cast-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+.cast-name {
+  font-weight: 300;
+  font-size: var(--fs-sm);
+}
+.cast-role {
+  color: var(--c-gray-400);
+  font-size: var(--fs-sm);
+}
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   THEATER SEARCH                                                         */
+/* ───────────────────────────────────────────────────────────────────────── */
+.theater-search {
+  margin: 32px 0;
+}
+.theater-search-inputs {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   SHOWTIMES                                                              */
+/* ───────────────────────────────────────────────────────────────────────── */
+.showtimes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.date-select {
+  width: auto;
+}
+.theater-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.theater {
+  background: var(--c-gray-900);
+  padding: 24px;
+  border-radius: 8px;
+}
+.theater-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.theater-name {
+  font-size: var(--fs-lg);
+  font-weight: 400;
+}
+.theater-address {
+  color: var(--c-gray-400);
+  margin-bottom: 8px;
+  font-size: var(--fs-sm);
+}
+.theater-features {
+  display: flex;
+  gap: 16px;
+  font-size: var(--fs-sm);
+  color: var(--c-yellow-400);
+}
+.theater-info-link {
+  color: var(--c-yellow-400);
+  text-decoration: none;
+}
+.theater-info-link:hover {
+  color: var(--c-yellow-300);
+}
+.showtime-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.btn-time {
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  background: var(--c-gray-800);
+  color: var(--c-text);
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-time:hover {
+  background: var(--c-yellow-400);
+  color: var(--c-bg);
+}
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   REVIEWS                                                                */
+/* ───────────────────────────────────────────────────────────────────────── */
+.reviews-section {
+  margin: 32px 0;
+}
+.review-form {
+  margin-bottom: 24px;
+}
+.review-form .btn {
+  margin-top: 0.5rem;
+}
+.rating-input {
+  display: flex;
+  flex-direction: row-reverse; /* so the stars still read left→right */
+  justify-content: left;
+  gap: 0.8px;                
+}
+.rating-input input {
+  display: none;
+}
+/* all stars start gray */
+.rating-input label {
+  font-size: 1.5rem;                
+  color: var(--c-gray-400);
+  cursor: pointer;
+}
+/* when you check an input, every label *after* it in the DOM turns yellow */
+/* because flex-direction is reversed, that paints the left‑most N stars */
+.rating-input input:checked ~ label {
+  color: var(--c-yellow-400);
+}
+
+
+.review-textarea {
+  width: 100%;
+  height: 96px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: var(--c-gray-800);
+  border: 1px solid var(--c-gray-700);
+  color: var(--c-text);
+  outline: none;
+  font-family: "Poppins", sans-serif;
+}
+.review-text {
+  font-size: var(--fs-sm);
+}
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.review {
+  background: var(--c-gray-900);
+  padding: 16px;
+  border-radius: 8px;
+}
+.review-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.avatar {
+  width: 32px;
+  height: 32px;
+  background: var(--c-yellow-400);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-bg);
+  font-weight: 600;
+}
+.reviewer-info {
+  margin-left: 12px;
+}
+.reviewer-name {
+  font-weight: 500;
+}
+.review-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-sm);
+}
+.review-meta .stars {
+  color: var(--c-yellow-400);
+}
+.review-time {
+  color: var(--c-gray-400);
+}
+.review-text {
+  color: var(--c-gray-300);
+}
+
+/* ───────────────────────────────────────────────────────────────────────── */
+/*   FOOTER                                                                 */
+/* ───────────────────────────────────────────────────────────────────────── */
+.footer {
+  background: var(--c-gray-900);
+  border-top: 1px solid var(--c-gray-800);
+  padding: 48px 16px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 32px;
+}
+.footer h3 {
+  color: var(--c-text);
+  margin-bottom: 16px;
+}
+.footer p,
+.footer a {
+  color: var(--c-gray-300);
+  text-decoration: none;
+}
+.footer a:hover {
+  color: var(--c-yellow-400);
+}
+.bottom-bar {
+  border-top: 1px solid var(--c-gray-800);
+  margin-top: 32px;
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+@media (min-width: 768px) {
+  .bottom-bar {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

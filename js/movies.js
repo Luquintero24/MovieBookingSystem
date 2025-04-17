@@ -135,6 +135,12 @@ async function loadNowShowing() {
 
       // Append to container
       moviesContainer.appendChild(boxDiv);
+      
+      boxDiv.dataset.id = doc.id;          // store Firestore doc‑id
+      boxDiv.addEventListener("click", () => {
+        window.location.href = `testing.html?id=${doc.id}`;
+      });
+
     });
 
   } catch (err) {
