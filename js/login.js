@@ -1,6 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import {  getAuth, 
+          setPersistence, 
+          browseLocalPersistence, 
+          signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -17,28 +20,34 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app)
+const auth = getAuth(app);
+
 
 
 const submit = document.getElementById('submit');
-submit.addEventListener("click",function(event) {
-  event.preventDefault()
+submit.addEventListener("click", function(event) {
+  event.preventDefault();
 
   //inputs
   const email= document.getElementById('email').value;
   const password = document.getElementById('password').value
-  signInWithEmailAndPassword(auth, email, password)
+
+
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      signInWithEmailAndPassword(auth, email, password); // ← NOT returned
+    })
     .then((userCredential) => {
-      // Signed up 
+      // Login successful
       const user = userCredential.user;
-      alert('logging')
-      // ...
+
+      //OPTIONAL: it saves the user to local storage
+      localStorage.setItem("user", JSON.stringify(user));
+
+      window.location.href = "user-profile.html";
     })
     .catch((error) => {
-      const errorCode = error.code;
       const errorMessage = error.message;
-      alert(errorMessage)
-      // ..
+      alert(errorMessage);
     });
-
-})
+});
