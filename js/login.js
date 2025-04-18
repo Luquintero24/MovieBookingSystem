@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import {  getAuth, 
           setPersistence, 
-          browseLocalPersistence, 
+          browserLocalPersistence, 
           signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 // Your web app's Firebase configuration
@@ -32,7 +32,7 @@ submit.addEventListener("click", function(event) {
   
   setPersistence(auth, browserLocalPersistence)
     .then(() => {
-      signInWithEmailAndPassword(auth, email, password); // ← NOT returned
+      return signInWithEmailAndPassword(auth, email, password); // ← NOT returned
     })
     .then((userCredential) => {
       // Login successful

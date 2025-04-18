@@ -2,23 +2,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>User Profile</title>
-</head>
-<body>
-	<h1>User Profile</h1>
-	<form id="profile-form">
-		<label>First Name: <input type="text" id="firstName"></label><br>
-		<label>Last Name: <input type="text" id="lastName"></label><br>
-		<label>Phone: <input type="text" id="phone"></label><br>
-		<label>Address: <input type="text" id="address"></label><br>
-		<label>City: <input type="text" id="city"></label><br>
-		<label>State: <input type="text" id="state"></label><br>
-		<label>Zip Code: <input type="text" id="zip"></label><br>
-		<button type="submit">Save</button>
-	</form>
-
-	<p id="status"></p>
-
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>RaiderTix - Profile</title>
+	<link rel="stylesheet" href="./css/login.css" />
+	<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 	<script type="module" src="./js/user-profile.js" defer></script>
+</head>
+<body class="min-h-screen bg-black flex items-center justify-center p-4">
+	<div class="w-full max-w-md bg-zinc-900 p-8 rounded-2xl shadow-2xl">
+		
+		<!-- Logo -->
+		<div class="flex items-center justify-center mb-8">
+			<img src="./img/raidertix-high-resolution-logo-transparent (1).png" 
+			     alt="RaiderTix Logo"
+			     style="height: 40px; width: auto;" />
+		</div>
+
+		<h2 class="text-2xl font-semibold text-white mb-6 text-center">
+			User Profile
+		</h2>
+
+		
+
+
+		<form id="profile-form" class="space-y-4">
+			<!-- First + Last Name -->
+			<div class="flex gap-4">
+				<div class="w-1/2">
+					<label for="firstName" class="block text-sm font-medium text-yellow-400 mb-1">First Name</label>
+					<input type="text" id="firstName" class="w-full p-2 rounded bg-zinc-800 text-white border border-zinc-700" />
+				</div>
+			
+				<div class="w-1/2">
+					<label for="lastName" class="block text-sm font-medium text-yellow-400 mb-1">Last Name</label>
+					<input type="text" id="lastName" class="w-full p-2 rounded bg-zinc-800 text-white border border-zinc-700" />
+				</div>
+			</div>
+			<!-- Phone -->
+			<div>
+				<label for="phone" class="block text-sm font-medium text-yellow-400 mb-1">Phone Number</label>
+				<input type="text" id="phone" class="w-full p-2 rounded bg-zinc-800 text-white border border-yellow-400" />
+			</div>
+			<!-- Address -->
+			<div>
+				<label for="address" class="block text-sm font-medium text-yellow-400 mb-1">Address</label>
+				<input type="text" id="address" class="w-full p-2 rounded bg-zinc-800 text-white border border-yellow-400" />
+			</div>
+			<!-- City + State -->
+			<div class="flex gap-4">
+				<div class="w-1/2">
+					<label for="city" class="block text-sm font-medium text-yellow-400 mb-1">City</label>
+					<input type="text" id="city" class="w-full p-2 rounded bg-zinc-800 text-white border border-yellow-400" />
+				</div>
+
+				<div class="w-1/2">
+					<label for="state" class="block text-sm font-medium text-yellow-400 mb-1">State</label>
+					<input type="text" id="state" class="w-full p-2 rounded bg-zinc-800 text-white border border-yellow-400" />
+				</div>
+			</div>
+			<!-- Zip -->
+			<div>
+				<label for="zip" class="block text-sm font-medium text-yellow-400 mb-1">Zip Code</label>
+				<input type="text" id="zip" class="w-full p-2 rounded bg-zinc-800 text-white border border-yellow-400" />
+			</div>
+			<!-- Email -->
+			<div>
+				<label for="email" class="block text-sm font-medium text-yellow-400 mb-1">Email</label>
+				<input type="email" id="email" class="w-full p-2 rounded bg-zinc-800 text-white border border-zinc-700" />
+			</div>
+
+			<!-- Password -->
+			<div>
+				<label for="password" class="block text-sm font-medium text-yellow-400 mb-1">Password</label>
+				<input type="password" id="password" class="w-full p-2 rounded bg-zinc-800 text-white border border-zinc-700" />
+			</div>
+
+			<!-- Save Button -->
+			<button type="submit" class="w-full mt-4 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-2 rounded">
+				Save
+			</button>
+		</form>
+
+		<p id="status" class="text-green-400 text-center mt-4"></p>
+	</div>
+
 </body>
+</html>

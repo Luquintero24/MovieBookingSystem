@@ -56,9 +56,36 @@ onAuthStateChanged(auth, async (user) => {
     try {
       const userDoc = await getDoc(doc(db, "users", user.uid));
       const userData = userDoc.exists() ? userDoc.data() : {};
-
+      /*
+      Stuff commented out in this section is the initial bits for admin 
+      account functionality, not fully working and wanted to check with group before
+      adding in full
+      */
+      const role = userDoc?.data()?.role;
       signInBtn.style.display = 'none';
       userInfo.style.display = 'flex';
+      
+      if (role === "admin") {
+        const dropdown = document.getElementById("userDropdown");
+
+        const adminLink = document.createElement("a");
+        adminLink.href = "admin.html";
+        adminLink.textContent = "Admin Panel";
+        adminLink.style = `
+          display: block;
+          background: transparent;
+          color: #fcd34d;
+          text-decoration: none;
+          width: 100%;
+          padding: 10px;
+          text-align: left;
+          cursor: pointer;
+          font-weight: 500;
+        `;
+
+        dropdown.insertBefore(adminLink, dropdown.firstChild);
+      }
+      
 
       const name = userData.firstName || 'User';
       usernameDisplay.textContent = `Hi, ${name.split(' ')[0]}!`;
