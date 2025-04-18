@@ -14,7 +14,7 @@
       <a href="./index.html" class="logo">
         <img
           src="./img/raidertix-high-resolution-logo-transparent (1).png"
-          alt=""
+          alt="RaiderTix logo"
         />
       </a>
       <div class="bx bx-menu" id="menu-icon"></div>
@@ -25,9 +25,11 @@
         <li><a href="./index.html">Browse Full Catalog</a></li>
         <li><a href="./index.html">Upcoming Films</a></li>
       </ul>
+
       <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Search movies..." />
       </div>
+
       <!-- Sign In Button (for signed out users) -->
       <a href="login.html" class="btn" id="signInBtn" style="margin-left: 16px"
         >Sign In</a
@@ -85,48 +87,40 @@
     <!-- Movie Details -->
     <section class="movie-details">
       <!-- Banner -->
-      <div class="movie-banner"></div>
+      <div id="banner" class="movie-banner"></div>
 
       <!-- Info -->
       <div class="container movie-info-wrapper">
+        <!-- Poster -->
         <div class="poster-container">
-          <img
+          <img 
+            id="poster"
             src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=800"
             alt="Dr. Strange Poster"
             class="movie-poster"
           />
         </div>
+        
+        <!-- Textual Info -->
         <div class="movie-info">
-          <h1 class="movie-title">Dr. Strange</h1>
-          <div class="movie-meta">
-            <span>2023</span>
-            <span>•</span>
-            <span>PG‑13</span>
-            <span>•</span>
-            <span>120 min</span>
-            <span>•</span>
-            <span>Action, Adventure, Fantasy</span>
+          <!-- Title -->
+          <h1 id="title" class="movie-title">Loading…</h1>
+          <!-- Meta line (year • rating • runtime • genres) -->
+          <div id="meta" class="movie-meta">
+            <span>Year</span> • <span>Rating</span> • <span>Runtime</span> •
+            <span>Genre</span>
           </div>
-          <p class="movie-description">
-            Dr. Stephen Strange’s life changes forever after a car accident robs
-            him of the use of his hands. When traditional medicine fails him, he
-            looks for healing—and hope—in a mysterious enclave…
+
+          <!-- Synopsis -->
+          <p id="synopsis" class="movie-description">
+            Loading synopsis…
           </p>
 
           <!-- Cast -->
           <div class="cast-section">
             <h2>Cast</h2>
-            <div class="cast-list">
-              <div class="cast-member">
-                <img
-                  src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200"
-                  alt=""
-                  class="cast-photo"
-                />
-                <p class="cast-name">Benedict Cumberbatch</p>
-                <p class="cast-role">Dr. Strange</p>
-              </div>
-              <!-- etc. -->
+            <div id="castList" class="cast-list">
+              <!-- JS will inject up to 3 cast members here -->
             </div>
           </div>
 
@@ -252,5 +246,7 @@
     <script src="js/main.js"></script>
     <script src="js/search.js"></script>
     <script type="module" src="js/authState.js" defer></script>
+    <script type="module" src="js/movie-details.js"></script>
+
   </body>
 </html>
