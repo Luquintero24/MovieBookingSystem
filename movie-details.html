@@ -5,77 +5,122 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RaiderTix – Movie Details</title>
-    <link rel="stylesheet" href="./css/testing.css" />
+    <link rel="stylesheet" href="./css/movie-details.css" />
   </head>
 
   <body class="page">
     <!-- Navbar  -->
     <header>
-      <a href="index.html" class="logo">
+      <a href="./index.html" class="logo">
         <img
           src="./img/raidertix-high-resolution-logo-transparent (1).png"
-          alt=""
+          alt="RaiderTix logo"
         />
       </a>
       <div class="bx bx-menu" id="menu-icon"></div>
 
       <!-- menu  -->
       <ul class="navbar">
-        <li><a href="index.html" class="home-active">Home</a></li>
-        <li><a href="index.html">Browse Full Catalog</a></li>
-        <li><a href="index.html">Upcoming Films</a></li>
+        <li><a href="./index.html" class="home-active">Home</a></li>
+        <li><a href="./index.html">Browse Full Catalog</a></li>
+        <li><a href="./index.html">Upcoming Films</a></li>
       </ul>
+
       <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Search movies..." />
       </div>
-      <a href="login.html" class="btn">Sign In</a>
+
+      <!-- Sign In Button (for signed out users) -->
+      <a href="login.html" class="btn" id="signInBtn" style="margin-left: 16px"
+        >Sign In</a
+      >
+
+      <!-- User Dropdown (for signed in users) -->
+      <div
+        class="user-info"
+        style="display: none; position: relative; margin-left: 16px"
+      >
+        <div
+          id="userToggle"
+          style="display: flex; align-items: center; gap: 8px; cursor: pointer"
+        >
+          <i class="bx bxs-user" style="color: white; font-size: 24px"></i>
+          <span id="username" style="color: white; font-weight: 500"
+            >Hi, User!</span
+          >
+          <i class="bx bx-chevron-down" style="color: white"></i>
+        </div>
+        <div
+          id="userDropdown"
+          style="
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #18181b;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            margin-top: 8px;
+            z-index: 100;
+            width: 120px;
+          "
+        >
+          <button
+            id="signOutBtn"
+            style="
+              background: transparent;
+              color: #fcd34d;
+              border: none;
+              width: 100%;
+              padding: 10px;
+              text-align: left;
+              cursor: pointer;
+              font-weight: 500;
+            "
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
     </header>
 
     <!-- Movie Details -->
     <section class="movie-details">
       <!-- Banner -->
-      <div class="movie-banner"></div>
+      <div id="banner" class="movie-banner"></div>
 
       <!-- Info -->
       <div class="container movie-info-wrapper">
+        <!-- Poster -->
         <div class="poster-container">
-          <img
+          <img 
+            id="poster"
             src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=800"
             alt="Dr. Strange Poster"
             class="movie-poster"
           />
         </div>
+        
+        <!-- Textual Info -->
         <div class="movie-info">
-          <h1 class="movie-title">Dr. Strange</h1>
-          <div class="movie-meta">
-            <span>2023</span>
-            <span>•</span>
-            <span>PG‑13</span>
-            <span>•</span>
-            <span>120 min</span>
-            <span>•</span>
-            <span>Action, Adventure, Fantasy</span>
+          <!-- Title -->
+          <h1 id="title" class="movie-title">Loading…</h1>
+          <!-- Meta line (year • rating • runtime • genres) -->
+          <div id="meta" class="movie-meta">
+            <span>Year</span> • <span>Rating</span> • <span>Runtime</span> •
+            <span>Genre</span>
           </div>
-          <p class="movie-description">
-            Dr. Stephen Strange’s life changes forever after a car accident robs
-            him of the use of his hands. When traditional medicine fails him, he
-            looks for healing—and hope—in a mysterious enclave…
+
+          <!-- Synopsis -->
+          <p id="synopsis" class="movie-description">
+            Loading synopsis…
           </p>
 
           <!-- Cast -->
           <div class="cast-section">
             <h2>Cast</h2>
-            <div class="cast-list">
-              <div class="cast-member">
-                <img
-                  src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200"
-                  alt=""
-                  class="cast-photo"
-                />
-                <p class="cast-name">Benedict Cumberbatch</p>
-                <p class="cast-role">Dr. Strange</p>
-              </div>
-              <!-- etc. -->
+            <div id="castList" class="cast-list">
+              <!-- JS will inject up to 3 cast members here -->
             </div>
           </div>
 
@@ -199,5 +244,9 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script src="js/search.js"></script>
+    <script type="module" src="js/authState.js" defer></script>
+    <script type="module" src="js/movie-details.js"></script>
+
   </body>
 </html>

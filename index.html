@@ -1,44 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RaiderTix Movie Ticket Main Page</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+    />
     <!-- Link Swiper's CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"
+    />
+  </head>
+  <body>
     <!-- Navbar  -->
     <header>
-        <a href="#home" class="logo">
-            <img src="./img/raidertix-high-resolution-logo-transparent (1).png" alt="">
-        </a>
-        <div class="bx bx-menu" id="menu-icon"></div>
+      <a href="#home" class="logo">
+        <img
+          src="./img/raidertix-high-resolution-logo-transparent (1).png"
+          alt=""
+        />
+      </a>
+      <div class="bx bx-menu" id="menu-icon"></div>
 
-        <!-- menu  -->
-        <ul class="navbar">
-            <li><a href="#home" class="home-active">Home</a></li>
-            <li><a href="#movies">Browse Full Catalog</a></li>
-            <li><a href="#coming">Upcoming Films</a></li>
-        </ul>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search movies...">
-        </div>
-        <!-- Sign In Button (for signed out users) -->
-        <a href="login.html" class="btn" id="signInBtn" style="margin-left: 16px;">Sign In</a>
+      <!-- menu  -->
+      <ul class="navbar">
+        <li><a href="#home" class="home-active">Home</a></li>
+        <li><a href="#movies">Browse Full Catalog</a></li>
+        <li><a href="#coming">Upcoming Films</a></li>
+      </ul>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search movies..." />
+      </div>
+      <!-- Sign In Button (for signed out users) -->
+      <a href="login.html" class="btn" id="signInBtn" style="margin-left: 16px"
+        >Sign In</a
+      >
 
-        <!-- User Dropdown (for signed in users) -->
-        <div class="user-info" style="display: none; position: relative; margin-left: 16px;">
-        <div id="userToggle" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-            <i class='bx bxs-user' style="color: white; font-size: 24px;"></i>
-            <span id="username" style="color: white; font-weight: 500;">Hi, User!</span>
-            <i class='bx bx-chevron-down' style="color: white;"></i>
+      <!-- User Dropdown (for signed in users) -->
+      <div
+        class="user-info"
+        style="display: none; position: relative; margin-left: 16px"
+      >
+        <div
+          id="userToggle"
+          style="display: flex; align-items: center; gap: 8px; cursor: pointer"
+        >
+          <i class="bx bxs-user" style="color: white; font-size: 24px"></i>
+          <span id="username" style="color: white; font-weight: 500">Hi, User!</span>
+          <i class="bx bx-chevron-down" style="color: white"></i>
         </div>
-        <div id="userDropdown" style="
+        <div
+          id="userDropdown"
+          style="
             display: none;
             position: absolute;
             top: 100%;
@@ -49,75 +67,79 @@
             margin-top: 8px;
             z-index: 100;
             width: 120px;
-        ">
-            <button id="signOutBtn" style="
-            background: transparent;
-            color: #fcd34d;
-            border: none;
-            width: 100%;
-            padding: 10px;
-            text-align: left;
-            cursor: pointer;
-            font-weight: 500;
-            ">
+          "
+        >
+          <button
+            id="signOutBtn"
+            style="
+              background: transparent;
+              color: #fcd34d;
+              border: none;
+              width: 100%;
+              padding: 10px;
+              text-align: left;
+              cursor: pointer;
+              font-weight: 500;
+            "
+          >
             Sign Out
-            </button>
+          </button>
         </div>
-        </div>
-
-          
+      </div>
     </header>
 
     <!-- Home  -->
     <section class="home swiper" id="home">
-        <div class="swiper-wrapper" id="featuredSlides">
-            <!-- Dynamically filled by JS with featured movies -->
-        </div>
-        <div class="swiper-pagination"></div>
+      <div class="swiper-wrapper" id="featuredSlides">
+        <!-- Dynamically filled by JS with featured movies -->
+      </div>
+      <div class="swiper-pagination"></div>
     </section>
 
     <!-- Movies  -->
     <div class="movies" id="movies">
-        <h2 class="heading">Currently Showing</h2>
-        <!-- Movies container  -->
-        <div class="movies-container">
-            <!-- All the movies fetched from Firestore here  -->
-        </div>
+      <h2 class="heading">Currently Showing</h2>
+      <!-- Movies container  -->
+      <div class="movies-container">
+        <!-- All the movies fetched from Firestore here  -->
+      </div>
     </div>
 
     <!-- Coming  -->
     <section class="coming" id="coming">
-        <h2 class="heading">Coming Soon</h2>
-        <!-- coming contanier  -->
-        <div class="coming-container swiper">
-            <div class="swiper-wrapper">
-                <!-- All the upcoming movies and the logic in movies.js  -->
-            </div>
+      <h2 class="heading">Coming Soon</h2>
+      <!-- coming contanier  -->
+      <div class="coming-container swiper">
+        <div class="swiper-wrapper">
+          <!-- All the upcoming movies and the logic in movies.js  -->
         </div>
+      </div>
     </section>
 
     <!-- Footer  -->
     <section class="footer">
-        <a href="" class="logo">
-            <img src="./img/raidertix-high-resolution-logo-transparent (1).png" alt="">
-        </a>
-        <div class="social">
-            <a href=""><i class='bx bxl-facebook'></i></a>
-            <a href=""><i class='bx bxl-twitter'></i></a>
-            <a href=""><i class='bx bxl-instagram'></i></a>
-        </div>
+      <a href="" class="logo">
+        <img
+          src="./img/raidertix-high-resolution-logo-transparent (1).png"
+          alt=""
+        />
+      </a>
+      <div class="social">
+        <a href=""><i class="bx bxl-facebook"></i></a>
+        <a href=""><i class="bx bxl-twitter"></i></a>
+        <a href=""><i class="bx bxl-instagram"></i></a>
+      </div>
     </section>
 
     <!-- Copyright  -->
     <div class="copyright">
-        <p>&#169; RaiderTix All Right Reserved</p>
+      <p>&#169; RaiderTix All Right Reserved</p>
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/search.js"></script>
     <script type="module" src="js/movies.js"></script>
     <script type="module" src="./js/authState.js" defer></script>
-</body>
+  </body>
 </html>
