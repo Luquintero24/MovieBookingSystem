@@ -1,0 +1,7 @@
+# Ignore these files since I use them locally for fetching and seeding data purpose
+# Dependencies folder
+node_modules/
+
+# Package files 
+package-lock.json
+package.json
