@@ -6,8 +6,10 @@ import {
   collection,
   query,
   where,
-  getDocs
+  getDocs,
+  addDoc
 } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC7UQTcpoKETfZZT2LZ0AT7mh_jaSZthGA",
@@ -19,6 +21,16 @@ const firebaseConfig = {
 };
 initializeApp(firebaseConfig);
 const db = getFirestore();
+const auth = getAuth();
+
+let currentUser = null;
+let m = null; 
+
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+});
+
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 function getDocId() {
@@ -75,7 +87,7 @@ async function loadMovieDetails(){
   // load movie data…
   const snap = await getDoc(doc(db,"movies",id));
   if (!snap.exists()) return console.error("Movie not found");
-  const m = snap.data();
+  m = snap.data();
 
   // banner & poster & title
   document.getElementById("banner").style.backgroundImage = `url('${m.backdropUrl}')`;
@@ -131,3 +143,34 @@ async function loadMovieDetails(){
 }
 
 loadMovieDetails().catch(console.error);
+
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("btn-time")) {
+    if (!currentUser) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    const time = e.target.textContent;
+    const theaterEl = e.target.closest(".theater");
+    const theaterName = theaterEl.querySelector(".theater-name").textContent;
+
+    let current = theaterEl;
+    let date = "";
+    while (current && current.previousElementSibling) {
+      current = current.previousElementSibling;
+      if (current.classList.contains("date-heading")) {
+        date = current.textContent;
+        break;
+      }
+    }
+
+    const params = new URLSearchParams({
+      movie: m.title,
+      theater: theaterName,
+      date,
+      time
+    });
+    window.location.href = `cart.html?${params.toString()}`;
+  }
+});
