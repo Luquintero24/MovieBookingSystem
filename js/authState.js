@@ -36,6 +36,9 @@ const signOutBtn = document.getElementById('signOutBtn');
 const userToggle = document.getElementById('userToggle');
 const userDropdown = document.getElementById('userDropdown');
 
+const cartIcon = document.getElementById("cartIcon");
+const cartBadge = document.getElementById("cartBadge");
+
 userToggle?.addEventListener('click', () => {
   if (userDropdown.style.display === 'block') {
     userDropdown.style.display = 'none';
@@ -59,6 +62,17 @@ onAuthStateChanged(auth, async (user) => {
 
       signInBtn.style.display = 'none';
       userInfo.style.display = 'flex';
+      cartIcon.style.display = 'block';
+
+      const cartData = JSON.parse(localStorage.getItem("cartDetails") || "{}");
+      if (cartData.tickets) {
+        cartBadge.textContent = cartData.tickets;
+        cartBadge.style.display = "inline-block";
+      } else {
+        cartBadge.textContent = "0";
+        cartBadge.style.display = "none"; // or "inline-block" if you want it visible
+      }
+      
 
       const name = userData.firstName || 'User';
       usernameDisplay.textContent = `Hi, ${name.split(' ')[0]}!`;
@@ -68,16 +82,37 @@ onAuthStateChanged(auth, async (user) => {
   } else {
     signInBtn.style.display = 'block';
     userInfo.style.display = 'none';
+    cartIcon.style.display = 'none';
   }
 });
 
-// Sign out logic
+
 signOutBtn?.addEventListener('click', () => {
   signOut(auth)
     .then(() => {
+      localStorage.removeItem("cartDetails");  
+      const badge = document.getElementById("cartBadge");
+      if (badge) {
+        badge.textContent = "0";
+        badge.style.display = "none"; 
+      }
       window.location.href = "index.html";
     })
     .catch((error) => {
       alert("Error signing out: " + error.message);
     });
 });
+
+
+cartIcon?.addEventListener("click", () => {
+  const details = JSON.parse(localStorage.getItem("cartDetails") || "{}");
+  if (!details.tickets) {
+    alert("Please add tickets to your cart first.");
+    return;
+  }
+
+  const params = new URLSearchParams(details);
+  window.location.href = `cart.html?${params.toString()}`;
+});
+
+
