@@ -145,11 +145,25 @@ document.addEventListener("DOMContentLoaded", async () => {
               <button onclick="window.print()" style="margin:0.5rem; padding:0.5rem 1rem; background:#FFBF00; border:none; border-radius:0.5rem; cursor:pointer;">Print Ticket</button>
               <button id="downloadTicketBtn" style="margin:0.5rem; padding:0.5rem 1rem; background:#FFBF00; border:none; border-radius:0.5rem; cursor:pointer;">Download Ticket</button>
               <br><br>
-              <button onclick="window.location.href='index.html'" style="color:white; background:none; border:none; margin-top:1rem; cursor:pointer;">Close</button>
+              <button id="closeModalBtn" style="color:white; background:none; border:none; margin-top:1rem; cursor:pointer;">Close</button>
             </div>
           </div>
         `;
         document.body.appendChild(modal);
+
+        document.getElementById("closeModalBtn").addEventListener("click", () => {
+          localStorage.removeItem("selectedTickets");
+          localStorage.removeItem("cartDetails");
+        
+          const badge = document.getElementById("cartBadge");
+          if (badge) {
+            badge.textContent = "0";
+            badge.style.display = "none";
+          }
+        
+          window.location.href = "index.html";
+        });
+        
 
         document.getElementById("downloadTicketBtn").addEventListener("click", async () => {
           const { jsPDF } = window.jspdf;

@@ -242,12 +242,55 @@ document.addEventListener("click", (e) => {
       }
     }
 
-    const params = new URLSearchParams({
-      movie: m.title,
-      theater: theaterName,
-      date,
-      time
+    // Show modal to select ticket count
+    const modal = document.createElement("div");
+    modal.innerHTML = `
+      <div style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:#000000cc; display:flex; justify-content:center; align-items:center; z-index:9999;">
+        <div style="background:white; color:black; padding:2rem; border-radius:1rem; text-align:center; max-width:90%; width:300px;">
+          <h3 style="font-size: 19px;">Select number of tickets</h3>
+          <br>
+          <input type="number" id="ticketCountInput" min="1" max="10" value="1" style="padding:5px; width:60px; text-align:center;" />
+          <br><br>
+          <button id="addToCartBtn" style="color: #3f3f46; background:#FFBF00; padding:10px 18px; border:none; border-radius:8px; font-size:15px; font-weight:bold;">Add to Cart</button>
+          <br><br>
+          <button id="cancelBtn" style="background:none; border:none; color:gray;">Cancel</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    document.getElementById("cancelBtn").addEventListener("click", () => {
+      modal.remove();  
     });
-    window.location.href = `cart.html?${params.toString()}`;
+    
+
+    document.getElementById("addToCartBtn").addEventListener("click", () => {
+      const count = parseInt(document.getElementById("ticketCountInput").value);
+      if (isNaN(count) || count < 1 || count > 10) {
+        alert("Please select between 1 and 10 tickets.");
+        return;
+      }
+    
+      // Save all data to localStorage
+      localStorage.setItem("cartDetails", JSON.stringify({
+        movie: m.title,
+        theater: theaterName,
+        date,
+        time,
+        tickets: count
+      }));
+    
+      // Update badge
+      const badge = document.getElementById("cartBadge");
+      if (badge) {
+        badge.textContent = count;
+        badge.style.display = "inline-block";
+      }
+    
+      // Remove popup
+      modal.remove();
+    });
+    
   }
 });
+

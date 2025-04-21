@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const theater = params.get("theater");
   const date = params.get("date");
   const time = params.get("time");
+  const ticketCountFromURL = parseInt(params.get("tickets")) || 1;
 
   movieNameSpan.textContent = movie || "N/A";
   theaterNameSpan.textContent = theater || "N/A";
@@ -45,6 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
     currentUser = user;
   });
 
+  // Set initial ticket count and subtotal
+  ticketInput.value = ticketCountFromURL;
+  subtotalDisplay.textContent = `$${(ticketCountFromURL * pricePerTicket).toFixed(2)}`;
+
+  // Update subtotal on input
   ticketInput.addEventListener("input", () => {
     let count = parseInt(ticketInput.value);
     if (isNaN(count) || count < 1) count = 1;
@@ -57,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     subtotalDisplay.textContent = `$${subtotal.toFixed(2)}`;
   });
 
+  // Save booking on checkout
   checkoutBtn.addEventListener("click", async () => {
     const count = parseInt(ticketInput.value);
     if (!count || count < 1 || count > 10) {
