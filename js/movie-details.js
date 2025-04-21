@@ -71,6 +71,15 @@ function renderOne(date, datesMap, theaters) {
 }
 
 // ─── Review UI ──────────────────────────────────────────────────
+// display rating stars
+function renderStars(rating) {
+  let out = "";
+  for (let i = 1; i <= 5; i++) {
+    out += `<span class="star ${i <= rating ? "filled" : "empty"}">★</span>`;
+  }
+  return out;
+}
+
 function reviewHTML({ userName, rating, comment, createdAt }) {
   const time = createdAt?.toDate().toLocaleString() || "";
   return `
@@ -80,7 +89,7 @@ function reviewHTML({ userName, rating, comment, createdAt }) {
         <div class="reviewer-info">
           <h4 class="reviewer-name">${userName}</h4>
           <div class="review-meta">
-            <div class="stars">${"★".repeat(rating)}</div>
+            <div class="stars">${renderStars(rating)}</div>
             <span class="review-time">${time}</span>
           </div>
         </div>
