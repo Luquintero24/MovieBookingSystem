@@ -20,6 +20,7 @@ const auth = getAuth();
 
 // keep track of signed‑in user
 let currentUser = null;
+let m = null;
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
 });
@@ -152,7 +153,7 @@ async function loadMovieDetails() {
   // load movie doc
   const snap = await getDoc(doc(db, "movies", id));
   if (!snap.exists()) return console.error("Movie not found");
-  const m = snap.data();
+  m = snap.data();
 
   // banner/poster/title
   document.getElementById("banner").style.backgroundImage =
