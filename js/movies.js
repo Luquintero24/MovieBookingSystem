@@ -191,6 +191,11 @@ async function loadUpcoming() {
       `;
 
       upcomingContainer.appendChild(slideDiv);
+
+      slideDiv.dataset.id = doc.id; // store Firestore doc‑id
+      slideDiv.addEventListener("click", () => {
+        window.location.href = `movie-details.html?id=${doc.id}`;
+      });
     });
 
     // Re-initialize Swiper if needed
