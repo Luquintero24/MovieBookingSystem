@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
 import { getFirestore, doc, getDoc, collection, query, 
-        where, getDocs, addDoc, orderBy, serverTimestamp}
+        where, getDocs, addDoc, orderBy, serverTimestamp, updateDoc, deleteDoc }
 from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged} 
 from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
@@ -40,13 +40,15 @@ function makeTheaterHTML(slot, theaters) {
           <h3 class="theater-name">${th.name}</h3>
           <p class="theater-address">${th.address}</p>
           <div class="theater-features">
-            ${th.features.map(f => `<span>${f}</span>`).join("")}
+            ${th.features.map((f) => `<span>${f}</span>`).join("")}
           </div>
         </div>
         <a href="#" class="theater-info-link">View Theater Info</a>
       </div>
       <div class="showtime-buttons">
-        ${slot.times.map(t => `<button class="btn-time">${t}</button>`).join("")}
+        ${slot.times
+          .map((t) => `<button class="btn-time">${t}</button>`)
+          .join("")}
       </div>
     </div>`;
 }
@@ -54,10 +56,16 @@ function makeTheaterHTML(slot, theaters) {
 function renderAll(dates, datesMap, theaters) {
   const container = document.querySelector(".theater-list");
   container.innerHTML = "";
-  dates.forEach(date => {
-    container.insertAdjacentHTML("beforeend", `<h3 class="date-heading">${date}</h3>`);
-    (datesMap[date] || []).forEach(slot => {
-      container.insertAdjacentHTML("beforeend", makeTheaterHTML(slot, theaters));
+  dates.forEach((date) => {
+    container.insertAdjacentHTML(
+      "beforeend",
+      `<h3 class="date-heading">${date}</h3>`
+    );
+    (datesMap[date] || []).forEach((slot) => {
+      container.insertAdjacentHTML(
+        "beforeend",
+        makeTheaterHTML(slot, theaters)
+      );
     });
   });
 }
@@ -65,7 +73,7 @@ function renderAll(dates, datesMap, theaters) {
 function renderOne(date, datesMap, theaters) {
   const container = document.querySelector(".theater-list");
   container.innerHTML = "";
-  (datesMap[date] || []).forEach(slot => {
+  (datesMap[date] || []).forEach((slot) => {
     container.insertAdjacentHTML("beforeend", makeTheaterHTML(slot, theaters));
   });
 }
@@ -80,8 +88,20 @@ function renderStars(rating) {
   return out;
 }
 
-function reviewHTML({ userName, rating, comment, createdAt }) {
+function reviewHTML(review, reviewId) {
+  const { userId, userName, rating, comment, createdAt } = review;
   const time = createdAt?.toDate().toLocaleString() || "";
+
+  // only show edit/delete for your own reviews
+  let actions = "";
+  if (currentUser?.uid === userId) {
+    actions = `
+      <div class="review-actions">
+        <button class="btn-edit" data-id="${reviewId}">Edit</button>
+        <button class="btn-delete" data-id="${reviewId}">Delete</button>
+      </div>`;
+  }
+
   return `
     <div class="review">
       <div class="review-header">
@@ -94,6 +114,7 @@ function reviewHTML({ userName, rating, comment, createdAt }) {
           </div>
         </div>
       </div>
+      ${actions}
       <p class="review-text">${comment}</p>
     </div>`;
 }
@@ -114,15 +135,18 @@ async function loadReviews(movieId) {
   }
 
   reviewsContainer.innerHTML = snap.docs
-    .map(d => reviewHTML(d.data()))
+    .map((d) => reviewHTML(d.data(), d.id))
     .join("");
+
+  // after injecting, wire up edit/delete:
+  attachReviewButtons(movieId);
 }
 
 function setupReviewForm(movieId) {
   const form = document.getElementById("reviewForm");
-  form.addEventListener("submit", async e => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    
+
     if (!currentUser) {
       alert("You need to be signed in to leave a review.");
       return;
@@ -135,22 +159,53 @@ function setupReviewForm(movieId) {
     }
 
     // write to Firestore
-    await addDoc(
-      collection(db, "movies", movieId, "reviews"),
-      {
-        userId: currentUser.uid,
-        userName:
-          currentUser.displayName ||
-          currentUser.email.split("@")[0],
-        rating,
-        comment,
-        createdAt: serverTimestamp()
-      }
-    );
+    await addDoc(collection(db, "movies", movieId, "reviews"), {
+      userId: currentUser.uid,
+      userName: currentUser.displayName || currentUser.email.split("@")[0],
+      rating,
+      comment,
+      createdAt: serverTimestamp(),
+    });
 
     // clear & reload
     form.reset();
     await loadReviews(movieId);
+  });
+}
+
+function attachReviewButtons(movieId) {
+  const container = document.getElementById("reviewsList");
+
+  container.querySelectorAll(".btn-delete").forEach(btn => {
+    btn.onclick = async () => {
+      const rid = btn.dataset.id;
+      if (!confirm("Delete your review?")) return;
+      await deleteDoc(doc(db, "movies", movieId, "reviews", rid));
+      await loadReviews(movieId);
+    };
+  });
+
+  container.querySelectorAll(".btn-edit").forEach(btn => {
+    btn.onclick = async () => {
+      const rid = btn.dataset.id;
+      // pull the existing comment + rating
+      const reviewRef = doc(db, "movies", movieId, "reviews", rid);
+      const snap = await getDoc(reviewRef);
+      const old = snap.data();
+      // ask user for new text & rating (simple prompt)
+      const newComment = prompt("Edit your review:", old.comment);
+      if (newComment === null) return;   // cancelled
+      let newRating = parseInt(prompt("Rating 1-5:", old.rating));
+      if (!(newRating >=1 && newRating <=5)) newRating = old.rating;
+
+      await updateDoc(reviewRef, {
+        comment: newComment,
+        rating: newRating,
+        // optionally update timestamp
+        createdAt: serverTimestamp()
+      });
+      await loadReviews(movieId);
+    };
   });
 }
 
@@ -165,8 +220,9 @@ async function loadMovieDetails() {
   m = snap.data();
 
   // banner/poster/title
-  document.getElementById("banner").style.backgroundImage =
-    `url('${m.backdropUrl}')`;
+  document.getElementById(
+    "banner"
+  ).style.backgroundImage = `url('${m.backdropUrl}')`;
   document.getElementById("poster").src = m.posterUrl;
   document.getElementById("title").textContent = m.title;
 
@@ -175,14 +231,15 @@ async function loadMovieDetails() {
   const rating = m.rating || "";
   const runtime = m.runtime ? `${m.runtime} min` : "";
   const genres = (m.genre || []).slice(0, 3).join(", ");
-  document.getElementById("meta").textContent = 
-    [year, rating, runtime, genres].filter(Boolean).join(" • ");
+  document.getElementById("meta").textContent = [year, rating, runtime, genres]
+    .filter(Boolean)
+    .join(" • ");
 
   // synopsis & cast
   document.getElementById("synopsis").textContent = m.synopsis;
   const castBox = document.getElementById("castList");
   castBox.innerHTML = "";
-  (m.cast || []).slice(0, 3).forEach(name => {
+  (m.cast || []).slice(0, 3).forEach((name) => {
     castBox.insertAdjacentHTML(
       "beforeend",
       `<div class="text-center">
@@ -194,16 +251,13 @@ async function loadMovieDetails() {
 
   // theaters map
   const thSnap = await getDocs(collection(db, "theaters"));
-  const theaters = new Map(thSnap.docs.map(d => [d.id, d.data()]));
+  const theaters = new Map(thSnap.docs.map((d) => [d.id, d.data()]));
 
   // showtimes grouped by date
-  const showQ = query(
-    collection(db, "showtimes"),
-    where("movieId", "==", id)
-  );
+  const showQ = query(collection(db, "showtimes"), where("movieId", "==", id));
   const showSnap = await getDocs(showQ);
   const datesMap = {};
-  showSnap.docs.forEach(d => {
+  showSnap.docs.forEach((d) => {
     const r = d.data();
     (datesMap[r.date] = datesMap[r.date] || []).push(r);
   });
@@ -213,8 +267,8 @@ async function loadMovieDetails() {
   const sel = document.getElementById("dateSelect");
   sel.innerHTML =
     `<option value="">All Dates</option>` +
-    dates.map(d => `<option value="${d}">${d}</option>`).join("");
-  sel.addEventListener("change", e => {
+    dates.map((d) => `<option value="${d}">${d}</option>`).join("");
+  sel.addEventListener("change", (e) => {
     if (!e.target.value) renderAll(dates, datesMap, theaters);
     else renderOne(e.target.value, datesMap, theaters);
   });
@@ -270,9 +324,8 @@ document.addEventListener("click", (e) => {
     document.body.appendChild(modal);
 
     document.getElementById("cancelBtn").addEventListener("click", () => {
-      modal.remove();  
+      modal.remove();
     });
-    
 
     document.getElementById("addToCartBtn").addEventListener("click", () => {
       const count = parseInt(document.getElementById("ticketCountInput").value);
@@ -280,27 +333,28 @@ document.addEventListener("click", (e) => {
         alert("Please select between 1 and 10 tickets.");
         return;
       }
-    
+
       // Save all data to localStorage
-      localStorage.setItem("cartDetails", JSON.stringify({
-        movie: m.title,
-        theater: theaterName,
-        date,
-        time,
-        tickets: count
-      }));
-    
+      localStorage.setItem(
+        "cartDetails",
+        JSON.stringify({
+          movie: m.title,
+          theater: theaterName,
+          date,
+          time,
+          tickets: count,
+        })
+      );
+
       // Update badge
       const badge = document.getElementById("cartBadge");
       if (badge) {
         badge.textContent = count;
         badge.style.display = "inline-block";
       }
-    
+
       // Remove popup
       modal.remove();
     });
-    
   }
 });
-
