@@ -10,6 +10,8 @@ import {
   doc,
   getDoc
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getApps } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+
 
 // Firebase configuration
 const firebaseConfig = {
@@ -21,8 +23,13 @@ const firebaseConfig = {
   appId: "1:230927628782:web:5460063cce3d8d55e8f6ff"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+let app;
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApps()[0];
+}
+
 const auth = getAuth(app);
 const db = getFirestore(app);
 
@@ -31,6 +38,7 @@ const signInBtn = document.getElementById('signInBtn');
 const userInfo = document.querySelector('.user-info');
 const usernameDisplay = document.getElementById('username');
 const signOutBtn = document.getElementById('signOutBtn');
+
 
 //Dropdown logic
 const userToggle = document.getElementById('userToggle');
@@ -60,9 +68,29 @@ onAuthStateChanged(auth, async (user) => {
       const userDoc = await getDoc(doc(db, "users", user.uid));
       const userData = userDoc.exists() ? userDoc.data() : {};
 
-      signInBtn.style.display = 'none';
+      if (signInBtn) signInBtn.style.display = 'none';
       userInfo.style.display = 'flex';
       cartIcon.style.display = 'block';
+
+           
+      const orderBtn = document.createElement("button");
+      orderBtn.textContent = "Order History";
+      orderBtn.style.cssText = `
+        background: transparent;
+        color: #fcd34d;
+        border: none;
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+        cursor: pointer;
+        font-weight: 500;
+      `;
+      orderBtn.addEventListener("click", () => {
+        window.location.href = "order-history.html";
+      });
+      userDropdown.insertBefore(orderBtn, signOutBtn);
+
+
 
       const cartData = JSON.parse(localStorage.getItem("cartDetails") || "{}");
       if (cartData.tickets) {
