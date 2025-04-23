@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RaiderTix – Movie Details</title>
     <link rel="stylesheet" href="./css/movie-details.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
   </head>
 
   <body class="page">
@@ -40,15 +41,17 @@
         class="user-info"
         style="display: none; position: relative; margin-left: 16px"
       >
-        <div
-          id="userToggle"
-          style="display: flex; align-items: center; gap: 8px; cursor: pointer"
-        >
-          <i class="bx bxs-user" style="color: white; font-size: 24px"></i>
-          <span id="username" style="color: white; font-weight: 500"
-            >Hi, User!</span
-          >
-          <i class="bx bx-chevron-down" style="color: white"></i>
+        <div style="display: flex; align-items: center; gap: 40px; margin-left: 20px;">
+          <div class="cart-icon" id="cartIcon" style="display: none; position: relative; cursor: pointer;">
+            <i class="bx bx-cart" style="color: white; font-size: 24px;"></i>
+            <span id="cartBadge" style="position: absolute; top: -6px; right: -8px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; display: none;">0</span>
+          </div>
+        
+          <div id="userToggle" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <i class="bx bxs-user" style="color: white; font-size: 24px"></i>
+            <span id="username" style="color: white; font-weight: 500">Hi, User!</span>
+            <i class="bx bx-chevron-down" style="color: white"></i>
+          </div>
         </div>
         <div
           id="userDropdown"
@@ -145,83 +148,48 @@
             <div class="showtimes-header">
               <h2>Showtimes</h2>
               <select id="dateSelect" class="search-input date-select">
-                <option value="">Select Date</option>
+                <!-- dates get populated here -->
               </select>
             </div>
             <div class="theater-list">
-              <div class="theater">
-                <div class="theater-header">
-                  <div>
-                    <h3 class="theater-name">AMC Empire 25</h3>
-                    <p class="theater-address">
-                      234 W 42nd St, New York, NY 10036
-                    </p>
-                    <div class="theater-features">
-                      <span>★ IMAX</span>
-                      <span>Dolby Cinema</span>
-                      <span>Wheelchair Accessible</span>
-                    </div>
-                  </div>
-                  <a href="#" class="theater-info-link">View Theater Info</a>
-                </div>
-                <div class="showtime-buttons">
-                  <button class="btn-time">10:30 AM</button>
-                  <button class="btn-time">1:45 PM</button>
-                  <button class="btn-time">4:30 PM</button>
-                  <button class="btn-time">7:15 PM</button>
-                </div>
-              </div>
-              <!-- Theater 2… -->
+              <!-- theater + time buttons get injected here -->
             </div>
           </div>
 
           <!-- Reviews -->
           <div class="reviews-section">
             <h2>Reviews</h2>
-
-            <form class="review-form">
+          
+            <!-- review form -->
+            <form id="reviewForm" class="review-form">
               <div class="rating-input">
                 <input type="radio" id="star5" name="rating" value="5" />
                 <label for="star5">★</label>
-
                 <input type="radio" id="star4" name="rating" value="4" />
                 <label for="star4">★</label>
-
                 <input type="radio" id="star3" name="rating" value="3" />
                 <label for="star3">★</label>
-
                 <input type="radio" id="star2" name="rating" value="2" />
                 <label for="star2">★</label>
-
                 <input type="radio" id="star1" name="rating" value="1" />
                 <label for="star1">★</label>
               </div>
-
+          
+              <!-- this ID is used by JS to pull out the comment text -->
               <textarea
+                id="reviewComment"
                 placeholder="Write your review…"
                 class="review-textarea"
               ></textarea>
+          
               <button type="submit" class="btn btn-primary">Post Review</button>
             </form>
-
-            <div class="reviews-list">
-              <div class="review">
-                <div class="review-header">
-                  <div class="avatar">JD</div>
-                  <div class="reviewer-info">
-                    <h4 class="reviewer-name">John Doe</h4>
-                    <div class="review-meta">
-                      <div class="stars">★★★★★</div>
-                      <span class="review-time">2 hours ago</span>
-                    </div>
-                  </div>
-                </div>
-                <p class="review-text">
-                  Amazing movie! The visual effects were stunning…
-                </p>
-              </div>
-              <!-- more reviews… -->
+          
+            <!-- JS will inject all reviews here -->
+            <div id="reviewsList" class="reviews-list">
+              <!-- all the reviews will be displayed here -->
             </div>
+
           </div>
         </div>
       </div>

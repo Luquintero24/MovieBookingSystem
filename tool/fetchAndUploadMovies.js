@@ -89,5 +89,5 @@ Add this to package.json:
 "type": "module",
 
 Then run to get all the movie info
-node js/fetchAndUploadMovies.js
+node tool/fetchAndUploadMovies.js
 */

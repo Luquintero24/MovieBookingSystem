@@ -201,7 +201,7 @@ h2 {
 /* ───────────────────────────────────────────────────────────────────────── */
 .movie-banner {
   position: relative;
-  height: 500px;
+  height: 550px;
   background: url("https://wallpapercave.com/wp/wp4625632.jpg") center/cover
     no-repeat;
 }
@@ -402,7 +402,7 @@ h2 {
 
 .review-textarea {
   width: 100%;
-  height: 96px;
+  height: 150px;
   padding: 8px 16px;
   border-radius: 8px;
   background: var(--c-gray-800);
@@ -410,14 +410,24 @@ h2 {
   color: var(--c-text);
   outline: none;
   font-family: "Poppins", sans-serif;
+  overflow-y: auto;
+  padding-right: 5px;       /* give a little space for the scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-gray-700) var(--c-gray-900);
 }
 .review-text {
   font-size: var(--fs-sm);
+  margin-bottom: 5px;
 }
 .reviews-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-height: 500px;        /* adjust as needed */
+  overflow-y: auto;
+  padding-right: 5px;       /* give a little space for the scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-gray-700) var(--c-gray-900);
 }
 .review {
   background: var(--c-gray-900);
@@ -452,16 +462,29 @@ h2 {
   gap: 4px;
   font-size: var(--fs-sm);
 }
-.review-meta .stars {
+/* filled vs empty stars */
+.review-meta .stars .star.filled {
   color: var(--c-yellow-400);
 }
-.review-time {
+.review-meta .stars .star.empty {
   color: var(--c-gray-400);
 }
-.review-text {
-  color: var(--c-gray-300);
+.review-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 15px;
 }
-
+.btn-edit, .btn-delete {
+  background: none;
+  border: none;
+  color: var(--c-gray-400);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.btn-edit:hover, .btn-delete:hover {
+  color: var(--c-yellow-400);
+}
 /* ───────────────────────────────────────────────────────────────────────── */
 /*   FOOTER                                                                 */
 /* ───────────────────────────────────────────────────────────────────────── */
