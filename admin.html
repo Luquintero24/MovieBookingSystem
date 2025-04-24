@@ -22,7 +22,6 @@
 			<li><a href="./index.html" class="home-active">Home</a></li>
 			<li><a href="./index.html">Browse Full Catalog</a></li>
 			<li><a href="./index.html">Upcoming Films</a></li>
-			<li><a href="./admin.html">Admin</a></li>
 		</ul>
 
 		<div class="search-bar">
@@ -87,15 +86,52 @@
 				<p>Total Tickets Sold: <span id="totalTickets">Loading...</span></p>
 				<p>Total Revenue: $<span id="totalRevenue">Loading...</span></p>
 				<p>Currently Playing Movies: <span id="movieCount">Loading...</span></p>
-				<!-- You’ll add show management UI here next -->
 			</section>
 
 			<h3 style="color: #fcd34d;"> Movies and Showtimes</h3>
-			<ul id="movieList" class="order-card" style="margin-top: 30px; text-align: left;"></ul>
+			<div id="movieList" class="order-card" style="margin-top: 30px; text-align: left;"></div>
 		
 
 		</div>
 	</main>
+
+	<div id="modalOverlay" style="display: none;" class="modal-overlay-background"></div>
+
+	<!-- Showtime Modal -->
+	<div id="showtimeModal" class="modal-overlay">
+		<div class="modal-content">
+			<h2 id="showtimeModalTitle">Edit Showtimes</h2>
+			<div id="currentShowtimes" style="margin-top: 10px;"></div>
+			<div id="showtimeListContainer"></div>
+
+			<!-- Inputs-->
+			<div style="margin: 10px 0;">
+				<label for="theaterSelect">Select Theater:</label>
+				<select id="newTheater">
+					<option value="">Choose a theater</option>
+					<option value="t1">Amarillo Movieplex</option>
+					<option value="t2">Levelland Film Center</option>
+					<option value="t3">Lubbock Grand Cinema</option>
+					<option value="t4">Odessa Cineplex</option>
+					<option value="t5">Midland Screenhouse</option>
+					<option value="t6">Snyder Cinema 8</option>
+				</select>
+			</div>
+
+			<div style="margin: 10px 0;">
+				<label for="showtimeInput">Enter Showtimes (comma-separated):</label>
+				<input type="text" id="showtimeInput" placeholder="e.g. 10:30 AM, 1:00 PM">
+			</div>
+
+			<div style="margin-top: 20px;">
+				<button id="saveShowtimesBtn">Save</button>
+				<button id="closeShowtimesBtn" onclick="closeShowtimesModal()">Cancel</button>
+			</div>
+
+			
+		</div>
+	</div>
+	
 
 	<!-- Footer -->
 	<section class="footer">
@@ -112,6 +148,8 @@
 	<div class="copyright">
 		<p>&#169; RaiderTix All Right Reserved</p>
 	</div>
+	<script type="module" src="./js/admin.js"></script>
+
 </body>
 
 </html>

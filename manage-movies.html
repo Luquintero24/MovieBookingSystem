@@ -6,8 +6,7 @@
 	<title>Admin Dashboard - RaiderTix</title>
 	<link rel="stylesheet" href="./css/style.css" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
-	<script type="module" src="./js/admin.js"></script>
-	<script type="module" src="js/authState.js"></script>
+	<script type="module" src="js/authState.js" defer></script>
 	<script src="js/search.js"></script>
 </head>
 
@@ -22,7 +21,6 @@
 			<li><a href="./index.html" class="home-active">Home</a></li>
 			<li><a href="./index.html">Browse Full Catalog</a></li>
 			<li><a href="./index.html">Upcoming Films</a></li>
-			<li><a href="./admin.html">Admin</a></li>
 		</ul>
 
 		<div class="search-bar">
@@ -72,19 +70,74 @@
 		</div>
 	</header>
 
-	<main>
-		<div class="order-grid" style="margin: 0 auto; max-width: 900px; text-align: center;">
-			<h1 style="margin-top: 100px; margin-bottom: 30px; text-align: center; color: #fcd34d;">need firebase to stop screwing with me</h1>
-			
 
-
-			<h3 style="color: #fcd34d;"> this will be updated soon I promise there's more, just wanted to get a working link out while I worked out the kinks </h3>
-		
-
+	<main style="padding: 40px; max-width: 900px; margin: auto; margin-top: 60px;">
+		<div class="manage-header">
+			<h1>Manage Movies</h1>
+			<div class="button-wrapper">
+				<button id="openAddMovieModalBtn" class="btn btn-yellow">Add Movie</button>
+			</div>
 		</div>
+	
+		<!-- Display All Movies -->
+		<section>
+			<h2>Existing Movies</h2>
+			<div id="moviesContainer" style="display: grid; gap: 20px;">
+				<div id="movieList"></div>
+				<!-- Movie cards will populate here via JS -->
+			</div>
+		</section>
 	</main>
 
-	<!-- Footer -->
+	
+	<!-- Modal Overlay -->
+	<div id="modalOverlay"></div>
+
+	<!-- Edit Modal -->
+	<div id="editModal" class="modal-overlay" style="display: none;">
+		<div class="modal-content">
+			<h2 id="modalTitle">Edit Movie</h2>
+
+			<label for="editTitle">Title</label>
+			<input type="text" id="editTitle" placeholder="Title" />
+
+			<label for="editPrice">Price</label>
+			<input type="number" id="editPrice" placeholder="Price" />
+
+			<label for="editGenres">Genres (comma separated)</label>
+			<input type="text" id="editGenres" placeholder="Genres" />
+
+			<label for="editCast">Cast (comma separated)</label>
+			<input type="text" id="editCast" placeholder="Actor 1, Actor 2" />
+
+			<label for="editRating">Rating</label>
+			<input type="text" id="editRating" placeholder="Rating (e.g., PG-13)" />
+
+			<label for="editReleaseDate">Release Date</label>
+			<input type="date" id="editReleaseDate" />
+
+			<label for="editRuntime">Runtime (minutes)</label>
+			<input type="number" id="editRuntime" placeholder="Runtime" />
+
+			<label for="editStatus">Status</label>
+			<input type="text" id="editStatus" placeholder="Status" />
+
+			<label for="editPosterUrl">Poster URL</label>
+			<input type="text" id="editPosterUrl" placeholder="Poster URL" />
+
+			<label for="editBackdropUrl">Backdrop URL</label>
+			<input type="text" id="editBackdropUrl" placeholder="Backdrop URL" />
+
+			<label for="editSynopsis">Synopsis</label>
+			<textarea id="editSynopsis" rows="8" placeholder="Synopsis"></textarea>
+
+			<button id="saveEditBtn">Save</button>
+			<button onclick="closeModal()">Cancel</button>
+		</div>
+	</div>
+
+
+<!-- Footer -->
 	<section class="footer">
 		<a href="index.html" class="logo">
 			<img src="./img/raidertix-high-resolution-logo-transparent (1).png" alt="" />
@@ -99,6 +152,9 @@
 	<div class="copyright">
 		<p>&#169; RaiderTix All Right Reserved</p>
 	</div>
+	
+<script type="module" src="./js/manage-movies.js" defer></script>
+
 </body>
 
 </html>
