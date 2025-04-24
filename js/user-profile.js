@@ -37,17 +37,52 @@ onAuthStateChanged(auth, async (user) => {
 	const userDocRef = doc(db, "users", uid);
 	const userDoc = await getDoc(userDocRef);
 
+	function formatPhoneNumber(number) {
+		const digits = number.replace(/\D/g, "").substring(0, 10);
+		if (digits.length === 10) {
+			return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+		}
+		return number; // fallback
+	}
+
+
 	if (userDoc.exists()) {
 		const data = userDoc.data();
 		document.getElementById("firstName").value = data.firstName || "";
 		document.getElementById("lastName").value = data.lastName || "";
-		document.getElementById("phone").value = data.phone || "";
+		document.getElementById("phone").value = data.phone ? formatPhoneNumber(data.phone) : "" || "";
 		document.getElementById("address").value = data.address || "";
 		document.getElementById("city").value = data.city || "";
 		document.getElementById("state").value = data.state || "";
 		document.getElementById("zip").value = data.zipCode || "";
 		document.getElementById("email").value = user.email || "";
 	}
+
+
+	const phoneInput = document.getElementById("phone");
+
+	phoneInput.addEventListener("input", (e) => {
+		let input = e.target.value.replace(/\D/g, ""); // Remove all non-digits
+
+		if (input.length > 0) {
+			input = input.substring(0, 10); // Limit to 10 digits
+			const area = input.substring(0, 3);
+			const prefix = input.substring(3, 6);
+			const line = input.substring(6, 10);
+
+			let formatted = "";
+			if (input.length > 6) {
+				formatted = `(${area}) ${prefix}-${line}`;
+			} else if (input.length > 3) {
+				formatted = `(${area}) ${prefix}`;
+			} else {
+				formatted = `(${area}`;
+			}
+
+			e.target.value = formatted;
+		}
+	});
+
 
 	document.getElementById("profile-form").addEventListener("submit", async (e) => {
 		e.preventDefault();
@@ -73,13 +108,6 @@ onAuthStateChanged(auth, async (user) => {
 				console.log("Email updated");
 			}
 
-			// Update password only if a new one was entered
-			if (newPassword) {
-				if (newPassword.length < 6) throw new Error("Password must be at least 6 characters");
-				await updatePassword(user, newPassword);
-				console.log("Password updated");
-			}
-
 			// Optionally show success and redirect
 			document.getElementById("status").textContent = "Profile updated!";
 			setTimeout(() => {
@@ -90,6 +118,8 @@ onAuthStateChanged(auth, async (user) => {
 			console.error("Error updating auth info:", err);
 			document.getElementById("status").textContent = "Error: " + err.message;
 		}
+		
+		
 
 		const status = document.getElementById("status");
 		status.textContent = "✅ Profile updated successfully!";
@@ -101,6 +131,7 @@ onAuthStateChanged(auth, async (user) => {
 		status.style.fontWeight = "bold";
 		status.style.transition = "opacity 0.5s ease";
 		status.style.opacity = 1;
+		status.style.display = "block";
 
 		//FOR TESTING PURPOSES ONLY
 		const TESTING = true;

@@ -1,4 +1,3 @@
-<!-- userProfile.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,86 +5,285 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>RaiderTix - Profile</title>
 	<link rel="stylesheet" href="./css/login.css" />
+	<link rel="stylesheet" href="./css/style.css" />
 	<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 	<script type="module" src="./js/user-profile.js" defer></script>
 </head>
-<body class="min-h-screen bg-black flex items-center justify-center p-4">
-	<div class="w-full max-w-md bg-zinc-900 p-8 rounded-2xl shadow-2xl">
-		
-		<!-- Logo -->
-		<div class="flex items-center justify-center mb-8">
-			<img src="./img/raidertix-high-resolution-logo-transparent (1).png" 
-			     alt="RaiderTix Logo"
-			     style="height: 40px; width: auto;" />
+  <body>
+	<!-- Header -->
+	<header>
+		<a href="./index.html" class="logo">
+			<img src="./img/raidertix-high-resolution-logo-transparent (1).png" alt="RaiderTix logo" />
+		</a>
+		<div class="bx bx-menu" id="menu-icon"></div>
+
+		<ul class="navbar">
+			<li><a href="./index.html" class="home-active">Home</a></li>
+			<li><a href="./index.html">Browse Full Catalog</a></li>
+			<li><a href="./index.html">Upcoming Films</a></li>
+		</ul>
+
+		<div class="search-bar">
+			<input type="text" id="searchInput" placeholder="Search movies..." />
 		</div>
 
-		<h2 class="text-2xl font-semibold text-white mb-6 text-center">
-			User Profile
-		</h2>
+		<a href="login.html" class="btn" id="signInBtn" style="margin-left: 16px">Sign In</a>
 
+		<div class="user-info" style="display: none; position: relative; margin-left: 16px">
+			<div style="display: flex; align-items: center; gap: 40px; margin-left: 20px;">
+				<div class="cart-icon" id="cartIcon" style="display: none; position: relative; cursor: pointer;">
+					<i class="bx bx-cart" style="color: white; font-size: 24px;"></i>
+					<span id="cartBadge" style="position: absolute; top: -6px; right: -8px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; display: none;">0</span>
+				</div>
+				<div id="userToggle" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+					<i class="bx bxs-user" style="color: white; font-size: 24px"></i>
+					<span id="username" style="color: white; font-weight: 500">Hi, User!</span>
+					<i class="bx bx-chevron-down" style="color: white"></i>
+				</div>
+			</div>
+			<div id="userDropdown" style="display: none; position: absolute; top: 100%; right: 0; background-color: #18181b; border: 1px solid #fcd34d; border-radius: 8px; margin-top: 8px; z-index: 100; width: 120px;">
+				<button id="signOutBtn" style="background: transparent; color: #fcd34d; border: none; width: 100%; padding: 10px; text-align: left; cursor: pointer; font-weight: 500;">
+					Sign Out
+				</button>
+			</div>
+		</div>
+	</header>
+	
+    <div class="min-h-screen bg-black flex items-center justify-center p-4">
 		
-
-
-		<form id="profile-form" class="space-y-4">
-			<!-- First + Last Name -->
-			<div class="flex gap-4">
-				<div class="w-1/2">
-					<label for="firstName" class="block text-sm font-medium text-yellow-400 mb-1">First Name</label>
-					<input type="text" id="firstName" class="w-full p-2 rounded bg-zinc-800 text-white border border-zinc-700" />
+		<div class="w-full max-w-md bg-zinc-900 p-8 rounded-2xl shadow-2xl">
+       
+        <h2 class="text-2xl font-semibold text-white mb-6 text-center">
+			Edit User Profile
+		  </h2>
+  
+		  <form id="profile-form" class="space-y-6">
+			<!-- First & Last Name (no icons) -->
+			<div class="grid grid-cols-2 gap-4">
+			  <div>
+				<label class="block text-yellow-400 mb-2 font-medium" for="firstName">
+				  First Name
+				</label>
+				<div class="relative no-icon">
+				  <input
+					id="firstName"
+					type="text"
+					placeholder="John"
+					required
+				  />
 				</div>
+			  </div>
+			  <div>
+				<label class="block text-yellow-400 mb-2 font-medium" for="lastName">
+				  Last Name
+				</label>
+				<div class="relative no-icon">
+				  <input
+					id="lastName"
+					type="text"
+					placeholder="Doe"
+					required
+				  />
+				</div>
+			  </div>
+			</div>
+
+			<!-- Phone (has icon) -->
+			<div>
+			  <label class="block text-yellow-400 mb-2 font-medium" for="phone">
+				Phone Number
+			  </label>
+			  <div class="relative">
+				<svg 
+				  xmlns="http://www.w3.org/2000/svg"
+				  width="20"
+				  height="20"
+				  viewBox="0 0 24 24"
+				  fill="none"
+				  stroke="#9CA3AF"
+				  stroke-width="2"
+				  stroke-linecap="round"
+				  stroke-linejoin="round"
+				  class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
+				>
+				  <path d="M22 16.92v3a2 2 0 0 1-2.18 2
+						   19.79 19.79 0 0 1-8.63-3.07
+						   19.5 19.5 0 0 1-6-6
+						   19.79 19.79 0 0 1-3.07-8.67
+						   A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72
+						   12.84 12.84 0 0 0 .7 2.81
+						   2 2 0 0 1-.45 2.11L8.09 9.91
+						   a16 16 0 0 0 6 6l1.27-1.27
+						   a2 2 0 0 1 2.11-.45
+						   12.84 12.84 0 0 0 2.81.7
+						   A2 2 0 0 1 22 16.92z"
+				  />
+				</svg>
+				<input
+				  id="phone"
+				  type="tel"
+				  placeholder="(123) 456-7890"
+				  pattern="\(\d{3}\) \d{3}-\d{4}"
+				  required
+				/>
+			  </div>
+			</div>
+  
+			<!-- Street Address (icon) -->
+			<div>
+			  <label class="block text-yellow-400 mb-2 font-medium" for="address">
+				Street Address
+			  </label>
+			  <div class="relative">
+				<svg 
+				  xmlns="http://www.w3.org/2000/svg"
+				  width="20"
+				  height="20"
+				  viewBox="0 0 24 24"
+				  fill="none"
+				  stroke="#9CA3AF"
+				  stroke-width="2"
+				  stroke-linecap="round"
+				  stroke-linejoin="round"
+				  class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
+				>
+				  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5
+						   a2 2 0 0 1-2-2z"
+				  />
+				  <polyline points="9 22 9 12 15 12 15 22"/>
+				</svg>
+				<input
+				  id="address"
+				  type="text"
+				  placeholder="123 Main St"
+				  required
+				/>
+			  </div>
+			</div>
+  
+			<!-- City & State (no icons) -->
+			<div class="grid grid-cols-2 gap-4">
+			  <div>
+				<label class="block text-yellow-400 mb-2 font-medium" for="city">
+				  City
+				</label>
+				<div class="relative no-icon">
+				  <input
+					id="city"
+					type="text"
+					placeholder="City"
+					required
+				  />
+				</div>
+			  </div>
+			  <div>
+				<label class="block text-yellow-400 mb-2 font-medium" for="state">
+				  State
+				</label>
+				<div class="relative no-icon">
+				  <input
+					id="state"
+					type="text"
+					placeholder="State"
+					required
+				  />
+				</div>
+			  </div>
+			</div>
+  
+			<!-- ZIP Code (no icon) -->
+			<div>
+			  <label class="block text-yellow-400 mb-2 font-medium" for="zipCode">
+				ZIP Code
+			  </label>
+			  <div class="relative no-icon">
+				<input
+				  id="zip"
+				  type="text"
+				  placeholder="12345"
+				  pattern="[0-9]{5}"
+				  required
+				/>
+			  </div>
+			</div>
+  
+
+			<!-- Email (icon) -->
+			<div>
+			  <label class="block text-yellow-400 mb-2 font-medium" for="email">
+				Email Address
+			  </label>
+			  <div class="relative">
+				<svg 
+				  xmlns="http://www.w3.org/2000/svg"
+				  width="20"
+				  height="20"
+				  viewBox="0 0 24 24"
+				  fill="none"
+				  stroke="#9CA3AF"
+				  stroke-width="2"
+				  stroke-linecap="round"
+				  stroke-linejoin="round"
+				  class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
+				>
+				  <rect width="20" height="16" x="2" y="4" rx="2"/>
+				  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+				</svg>
+				<input
+				  id="email"
+				  type="email"
+				  placeholder="john.doe@example.com"
+				  required
+				/>
+			  </div>
+			</div>
+  
 			
-				<div class="w-1/2">
-					<label for="lastName" class="block text-sm font-medium text-yellow-400 mb-1">Last Name</label>
-					<input type="text" id="lastName" class="w-full p-2 rounded bg-zinc-800 text-white border border-zinc-700" />
-				</div>
-			</div>
-			<!-- Phone -->
-			<div>
-				<label for="phone" class="block text-sm font-medium text-yellow-400 mb-1">Phone Number</label>
-				<input type="text" id="phone" class="w-full p-2 rounded bg-zinc-800 text-white border border-yellow-400" />
-			</div>
-			<!-- Address -->
-			<div>
-				<label for="address" class="block text-sm font-medium text-yellow-400 mb-1">Address</label>
-				<input type="text" id="address" class="w-full p-2 rounded bg-zinc-800 text-white border border-yellow-400" />
-			</div>
-			<!-- City + State -->
-			<div class="flex gap-4">
-				<div class="w-1/2">
-					<label for="city" class="block text-sm font-medium text-yellow-400 mb-1">City</label>
-					<input type="text" id="city" class="w-full p-2 rounded bg-zinc-800 text-white border border-yellow-400" />
-				</div>
+			<div class="text-center" style="margin-top: 16px;">
+			  <label class="block text-yellow-400 mb-2 font-medium" for="email">
+				  Forgot your Password?
+				</label>
+			  <a href="forgot-password.html" class="btn" style="background-color: #ffbf00; color: black; text-decoration: none; padding: 10px 20px; border-radius: 8px;">
+				  Change Password
+			  </a>
+		  </div>
+		  
+		  <div id="successMessage" style="display:none; background-color: #16a34a; color: white; padding: 10px; border-radius: 5px; text-align: center;">
+			Profile updated successfully!
+		  </div>
+		
+		  <div id="status" style="display: none;"></div>
 
-				<div class="w-1/2">
-					<label for="state" class="block text-sm font-medium text-yellow-400 mb-1">State</label>
-					<input type="text" id="state" class="w-full p-2 rounded bg-zinc-800 text-white border border-yellow-400" />
-				</div>
-			</div>
-			<!-- Zip -->
-			<div>
-				<label for="zip" class="block text-sm font-medium text-yellow-400 mb-1">Zip Code</label>
-				<input type="text" id="zip" class="w-full p-2 rounded bg-zinc-800 text-white border border-yellow-400" />
-			</div>
-			<!-- Email -->
-			<div>
-				<label for="email" class="block text-sm font-medium text-yellow-400 mb-1">Email</label>
-				<input type="email" id="email" class="w-full p-2 rounded bg-zinc-800 text-white border border-zinc-700" />
-			</div>
 
-			<!-- Password -->
-			<div>
-				<label for="password" class="block text-sm font-medium text-yellow-400 mb-1">Password</label>
-				<input type="password" id="password" class="w-full p-2 rounded bg-zinc-800 text-white border border-zinc-700" />
-			</div>
+		  <!-- Save Button -->
+		  <button type="submit" class="w-full mt-4 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-2 rounded">
+			  Save
+		  </button>
+		  </form>
 
-			<!-- Save Button -->
-			<button type="submit" class="w-full mt-4 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-2 rounded">
-				Save
-			</button>
-		</form>
+      </div>
+    </div>
 
-		<p id="status" class="text-green-400 text-center mt-4"></p>
+	<!-- Footer -->
+	<section class="footer">
+		<a href="index.html" class="logo">
+			<img src="./img/raidertix-high-resolution-logo-transparent (1).png" alt="" />
+		</a>
+		<div class="social">
+			<a href="#"><i class="bx bxl-facebook"></i></a>
+			<a href="#"><i class="bx bxl-twitter"></i></a>
+			<a href="#"><i class="bx bxl-instagram"></i></a>
+		</div>
+	</section>
+
+	<div class="copyright">
+		<p>&#169; RaiderTix All Right Reserved</p>
 	</div>
 
+
+<!-- Scripts -->
+<script src="js/main.js"></script>
+<script type="module" src="js/authState.js" defer></script>
+<script src="js/search.js"></script>
 </body>
 </html>

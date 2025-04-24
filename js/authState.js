@@ -142,7 +142,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-
+//sign out
 signOutBtn?.addEventListener('click', () => {
   signOut(auth)
     .then(() => {

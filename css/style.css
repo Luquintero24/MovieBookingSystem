@@ -389,3 +389,33 @@ section {
     display: none;
   }
 }
+
+/* Admin Dashboard */
+/* Admin Dashboard Custom Styles */
+.movie-title {
+	color: #fcd34d;
+	font-weight: bold;
+	font-size: 1.2rem; /* adjust as needed */
+	line-height: 1.5;
+  margin-top: 20px;
+	margin-bottom: 6px;
+}
+
+.theater-name {
+	color: #f87171;
+	font-size: 1rem;
+	line-height: 1.4;
+	margin-left: 20px;
+	margin-bottom: 4px;
+}
+
+.showtime-line {
+	color: #ffffff;
+	font-size: 0.95rem;
+	line-height: 1.4;
+	margin-left: 40px;
+	margin-bottom: 6px;
+}
+
+
+
