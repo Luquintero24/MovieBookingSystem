@@ -1,27 +1,29 @@
-// Firebase imports
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+// Import the functions you need from the SDKs you need
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import {
   getAuth,
   onAuthStateChanged,
   signOut
-} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import {
   getFirestore,
   doc,
   getDoc
-} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-import { getApps } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 
-// Firebase configuration
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC7UQTcpoKETfZZT2LZ0AT7mh_jaSZthGA",
-  authDomain: "moviebooking-20705.firebaseapp.com",
-  projectId: "moviebooking-20705",
-  storageBucket: "moviebooking-20705.firebasestorage.app",
-  messagingSenderId: "230927628782",
-  appId: "1:230927628782:web:5460063cce3d8d55e8f6ff"
+  apiKey: "AIzaSyDdFyRh-V58ONSP6EKWza9M-tr0yhs7l3s",
+  authDomain: "moviebookingswe.firebaseapp.com",
+  projectId: "moviebookingswe",
+  storageBucket: "moviebookingswe.firebasestorage.app",
+  messagingSenderId: "1096382048367",
+  appId: "1:1096382048367:web:6bccbccd1b901e0e24c59a"
 };
+
+
 
 let app;
 if (!getApps().length) {

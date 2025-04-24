@@ -1,25 +1,25 @@
-// Import from Firebase CDN (ES module style):
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import {
   getFirestore,
   collection,
   query,
   where,
   getDocs,
-} from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
 import Swiper from "https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.esm.browser.min.js";
 
-// Firebase config
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC7UQTcpoKETfZZT2LZ0AT7mh_jaSZthGA",
-  authDomain: "moviebooking-20705.firebaseapp.com",
-  projectId: "moviebooking-20705",
-  storageBucket: "moviebooking-20705.appspot.com",
-  messagingSenderId: "230927628782",
-  appId: "1:230927628782:web:5460063cce3d8d55e8f6ff",
+  apiKey: "AIzaSyDdFyRh-V58ONSP6EKWza9M-tr0yhs7l3s",
+  authDomain: "moviebookingswe.firebaseapp.com",
+  projectId: "moviebookingswe",
+  storageBucket: "moviebookingswe.appspot.com", // <-- Correct!
+  messagingSenderId: "1096382048367",
+  appId: "1:1096382048367:web:6bccbccd1b901e0e24c59a"
 };
 
-// Initialize Firebase & Firestore
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 

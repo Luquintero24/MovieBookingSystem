@@ -4,12 +4,12 @@ import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/fir
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC7UQTcpoKETfZZT2LZ0AT7mh_jaSZthGA",
-  authDomain: "moviebooking-20705.firebaseapp.com",
-  projectId: "moviebooking-20705",
-  storageBucket: "moviebooking-20705.firebasestorage.app",
-  messagingSenderId: "230927628782",
-  appId: "1:230927628782:web:5460063cce3d8d55e8f6ff"
+  apiKey: "AIzaSyDdFyRh-V58ONSP6EKWza9M-tr0yhs7l3s",
+  authDomain: "moviebookingswe.firebaseapp.com",
+  projectId: "moviebookingswe",
+  storageBucket: "moviebookingswe.firebasestorage.app",
+  messagingSenderId: "1096382048367",
+  appId: "1:1096382048367:web:6bccbccd1b901e0e24c59a"
 };
 
 // Initialize Firebase
