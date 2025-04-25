@@ -93,48 +93,70 @@
 	<!-- Modal Overlay -->
 	<div id="modalOverlay"></div>
 
-	<!-- Edit Modal -->
-	<div id="editModal" class="modal-overlay" style="display: none;">
-		<div class="modal-content">
-			<h2 id="modalTitle">Edit Movie</h2>
-
-			<label for="editTitle">Title</label>
-			<input type="text" id="editTitle" placeholder="Title" />
-
-			<label for="editPrice">Price</label>
-			<input type="number" id="editPrice" placeholder="Price" />
-
-			<label for="editGenres">Genres (comma separated)</label>
-			<input type="text" id="editGenres" placeholder="Genres" />
-
-			<label for="editCast">Cast (comma separated)</label>
-			<input type="text" id="editCast" placeholder="Actor 1, Actor 2" />
-
-			<label for="editRating">Rating</label>
-			<input type="text" id="editRating" placeholder="Rating (e.g., PG-13)" />
-
-			<label for="editReleaseDate">Release Date</label>
-			<input type="date" id="editReleaseDate" />
-
-			<label for="editRuntime">Runtime (minutes)</label>
-			<input type="number" id="editRuntime" placeholder="Runtime" />
-
-			<label for="editStatus">Status</label>
-			<input type="text" id="editStatus" placeholder="Status" />
-
-			<label for="editPosterUrl">Poster URL</label>
-			<input type="text" id="editPosterUrl" placeholder="Poster URL" />
-
-			<label for="editBackdropUrl">Backdrop URL</label>
-			<input type="text" id="editBackdropUrl" placeholder="Backdrop URL" />
-
-			<label for="editSynopsis">Synopsis</label>
-			<textarea id="editSynopsis" rows="8" placeholder="Synopsis"></textarea>
-
-			<button id="saveEditBtn">Save</button>
-			<button onclick="closeModal()">Cancel</button>
-		</div>
-	</div>
+    <div id="editModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+          <form id="movieForm">
+            <h2 id="modalTitle">Add Movie</h2>
+      
+            <div>
+              <label for="editTitle">Title</label>
+              <input type="text" id="editTitle" placeholder="Title" />
+            </div>
+            <div>
+              <label for="editPrice">Price</label>
+              <input type="number" id="editPrice" placeholder="Price" />
+            </div>
+      
+            <div>
+              <label for="editGenres">Genres (comma separated)</label>
+              <input type="text" id="editGenres" placeholder="Genres" />
+            </div>
+            <div>
+              <label for="editCast">Cast (comma separated)</label>
+              <input type="text" id="editCast" placeholder="Actor 1, Actor 2" />
+            </div>
+      
+            <div>
+              <label for="editRating">Rating</label>
+              <input type="text" id="editRating" placeholder="Rating (e.g., PG-13)" />
+            </div>
+            <div>
+              <label for="editReleaseDate">Release Date</label>
+              <input type="date" id="editReleaseDate" />
+            </div>
+      
+            <div>
+              <label for="editRuntime">Runtime (minutes)</label>
+              <input type="number" id="editRuntime" placeholder="Runtime" />
+            </div>
+            <div>
+              <label for="editStatus">Status</label>
+              <input type="text" id="editStatus" placeholder="Status" />
+            </div>
+      
+            <div>
+              <label for="editPosterUrl">Poster URL</label>
+              <input type="text" id="editPosterUrl" placeholder="Poster URL" />
+            </div>
+            <div>
+              <label for="editBackdropUrl">Backdrop URL</label>
+              <input type="text" id="editBackdropUrl" placeholder="Backdrop URL" />
+            </div>
+      
+            <div style="grid-column: 1 / span 2;">
+              <label for="editSynopsis">Synopsis</label>
+              <textarea id="editSynopsis" rows="6" placeholder="Synopsis"></textarea>
+            </div>
+      
+            <div class="modal-buttons">
+                <button type="submit" id="saveEditBtn">Save</button>
+                <button type="button" onclick="closeModal()">Cancel</button>
+              </div>
+              
+          </form>
+        </div>
+      </div>
+      
 
 
 <!-- Footer -->

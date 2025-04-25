@@ -7,77 +7,69 @@ import {
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+  // DOM references
   const ticketInput = document.getElementById("ticketCount");
   const subtotalDisplay = document.getElementById("subtotal");
   const checkoutBtn = document.getElementById("checkoutBtn");
+  const ticketPriceDisplay = document.getElementById("ticketPrice");
 
   const movieNameSpan = document.getElementById("movieName");
   const theaterNameSpan = document.getElementById("theaterName");
   const showtimeTextSpan = document.getElementById("showtimeText");
 
+
+  const cartDetails = JSON.parse(localStorage.getItem("cartDetails") || "{}");
   const params = new URLSearchParams(window.location.search);
-  const movie = params.get("movie");
-  const theater = params.get("theater");
-  const date = params.get("date");
-  const time = params.get("time");
-  const ticketCountFromURL = parseInt(params.get("tickets")) || 1;
 
-  movieNameSpan.textContent = movie || "N/A";
-  theaterNameSpan.textContent = theater || "N/A";
+  // Prefer localStorage first (for full workflow support)
+  const movie = cartDetails.movie || params.get("movie") || "N/A";
+  const theater = cartDetails.theater || params.get("theater") || "N/A";
+  const date = cartDetails.date || params.get("date") || "";
+  const time = cartDetails.time || params.get("time") || "";
+  const ticketCount = parseInt(cartDetails.tickets || params.get("tickets")) || 1;
+  const pricePerTicket = parseFloat(cartDetails.price || params.get("price")) || 10;
+
+  // Populate fields
+  movieNameSpan.textContent = movie;
+  theaterNameSpan.textContent = theater;
   showtimeTextSpan.textContent = date && time ? `${date} at ${time}` : "N/A";
+  ticketInput.value = ticketCount;
+  ticketInput.readOnly = true; // As in your HTML; set to false if you want to allow changes
+  ticketPriceDisplay.textContent = pricePerTicket.toFixed(2);
+  subtotalDisplay.textContent = `$${(ticketCount * pricePerTicket).toFixed(2)}`;
 
-  const pricePerTicket = 10;
-
+  // Firebase init
   const firebaseConfig = {
     apiKey: "AIzaSyDdFyRh-V58ONSP6EKWza9M-tr0yhs7l3s",
     authDomain: "moviebookingswe.firebaseapp.com",
     projectId: "moviebookingswe",
-    storageBucket: "moviebookingswe.appspot.com", // <-- Correct!
+    storageBucket: "moviebookingswe.appspot.com",
     messagingSenderId: "1096382048367",
     appId: "1:1096382048367:web:6bccbccd1b901e0e24c59a"
   };
-
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const auth = getAuth(app);
 
+  // Track current user
   let currentUser = null;
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
   });
 
-  // Set initial ticket count and subtotal
-  ticketInput.value = ticketCountFromURL;
-  subtotalDisplay.textContent = `$${(ticketCountFromURL * pricePerTicket).toFixed(2)}`;
-
-  // Update subtotal on input
-  ticketInput.addEventListener("input", () => {
-    let count = parseInt(ticketInput.value);
-    if (isNaN(count) || count < 1) count = 1;
-    if (count > 10) {
-      ticketInput.value = 10;
-      count = 10;
-    }
-
-    const subtotal = count * pricePerTicket;
-    subtotalDisplay.textContent = `$${subtotal.toFixed(2)}`;
-  });
-
-  // Save booking on checkout
+ 
+  // Checkout button logic
   checkoutBtn.addEventListener("click", async () => {
     const count = parseInt(ticketInput.value);
     if (!count || count < 1 || count > 10) {
       alert("Please enter a valid ticket count (1-10)");
       return;
     }
-
     const subtotal = count * pricePerTicket;
-
     if (!currentUser) {
       window.location.href = "login.html";
       return;
     }
-
     try {
       await addDoc(collection(db, "ticketSubtotals"), {
         userId: currentUser.uid,
@@ -87,9 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
         time,
         ticketCount: count,
         subtotal,
+        price: pricePerTicket, 
         timestamp: new Date()
       });
-
       alert("🎉 Booking successful!");
       window.location.href = "checkout.html";
     } catch (error) {

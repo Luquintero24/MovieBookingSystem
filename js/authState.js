@@ -64,6 +64,7 @@ document.addEventListener('click', (e) => {
 });
 
 // Auth state handler
+// Auth state handler
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     try {
@@ -74,9 +75,14 @@ onAuthStateChanged(auth, async (user) => {
       userInfo.style.display = 'flex';
       cartIcon.style.display = 'block';
 
-           
+      // ----------- Clean previous extra buttons to avoid duplicates -------------
+      Array.from(userDropdown.querySelectorAll(".dropdown-action"))
+        .forEach(btn => btn.remove());
+
+      // ----------- ORDER HISTORY BUTTON -----------
       const orderBtn = document.createElement("button");
       orderBtn.textContent = "Order History";
+      orderBtn.className = "dropdown-action";
       orderBtn.style.cssText = `
         background: transparent;
         color: #fcd34d;
@@ -90,10 +96,30 @@ onAuthStateChanged(auth, async (user) => {
       orderBtn.addEventListener("click", () => {
         window.location.href = "order-history.html";
       });
+
+      // ----------- USER SETTINGS/PROFILE BUTTON -----------
+      const settingsBtn = document.createElement("button");
+      settingsBtn.textContent = "User Settings";
+      settingsBtn.className = "dropdown-action";
+      settingsBtn.style.cssText = `
+        background: transparent;
+        color: #fcd34d;
+        border: none;
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+        cursor: pointer;
+        font-weight: 500;
+      `;
+      settingsBtn.addEventListener("click", () => {
+        window.location.href = "user-profile.html";
+      });
+
+      // ----------- Insert both above Sign Out -----------
+      userDropdown.insertBefore(settingsBtn, signOutBtn);
       userDropdown.insertBefore(orderBtn, signOutBtn);
 
-
-
+      // ----------- Cart badge logic -----------
       const cartData = JSON.parse(localStorage.getItem("cartDetails") || "{}");
       if (cartData.tickets) {
         cartBadge.textContent = cartData.tickets;
@@ -102,7 +128,6 @@ onAuthStateChanged(auth, async (user) => {
         cartBadge.textContent = "0";
         cartBadge.style.display = "none"; // or "inline-block" if you want it visible
       }
-      
 
       const name = userData.firstName || 'User';
       usernameDisplay.textContent = `Hi, ${name.split(' ')[0]}!`;
@@ -115,6 +140,7 @@ onAuthStateChanged(auth, async (user) => {
     cartIcon.style.display = 'none';
   }
 });
+
 
 
 signOutBtn?.addEventListener('click', () => {

@@ -343,6 +343,7 @@ document.addEventListener("click", (e) => {
           date,
           time,
           tickets: count,
+          price: m.price
         })
       );
 

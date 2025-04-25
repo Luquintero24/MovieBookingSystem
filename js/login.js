@@ -16,6 +16,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+const ADMIN_UID = "TO71jY3gpSUcfCbWNvcugtwJjif2";
+
 const submit = document.getElementById('submit');
 submit.addEventListener("click", function(event) {
   event.preventDefault();
@@ -30,8 +32,11 @@ submit.addEventListener("click", function(event) {
       // Login successful
       const user = userCredential.user;
 
-      // ✅ Redirect to main page
-      window.location.href = "index.html";
+      if (user.uid === ADMIN_UID) {
+        window.location.href = "admin.html";
+      } else {
+        window.location.href = "index.html";
+      }
     })
     .catch((error) => {
       const errorMessage = error.message;
