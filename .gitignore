@@ -5,3 +5,5 @@ node_modules/
 # Package files 
 package-lock.json
 package.json
+
+serviceAccountKey.json
