@@ -114,6 +114,27 @@ onAuthStateChanged(auth, async (user) => {
       settingsBtn.addEventListener("click", () => {
         window.location.href = "user-profile.html";
       });
+      
+      // — Admin Page button —
+      if (userData.role === "admin") {
+        const adminBtn = document.createElement("button");
+        adminBtn.textContent = "Admin Page";
+        adminBtn.className   = "dropdown-action";
+        adminBtn.style.cssText = `
+          background: transparent;
+          color: #fcd34d;
+          border: none;
+          width: 100%;
+          padding: 10px;
+          text-align: left;
+          cursor: pointer;
+          font-weight: 500;
+        `;
+        adminBtn.addEventListener("click", () => {
+          window.location.href = "admin.html";
+        });
+        userDropdown.insertBefore(adminBtn, signOutBtn);
+      }
 
       // ----------- Insert both above Sign Out -----------
       userDropdown.insertBefore(settingsBtn, signOutBtn);

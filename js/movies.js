@@ -24,7 +24,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const FEATURED_TITLES = [
-  "The Avengers",
+  "A Minecraft Movie",
   "Avengers: Infinity War",
   "Moana 2",
   "Captain America: Brave New World",
