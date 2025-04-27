@@ -19,16 +19,12 @@
             </h1></div>
   </header>
 
-  <form action="https://httpbin.org/post" class="form" method="POST">
+  <form id="checkoutForm" class="form">
     <div>
       <h2>Cart Products</h2>
       <div class="card">
-        <address id="cart-details">
-            <p><strong>🎬 Movie:</strong> <span id="movieName"></span></p>
-            <p><strong>📍 Theater:</strong> <span id="theaterName"></span></p>
-            <p><strong>🕒 Showtime:</strong> <span id="showtimeText"></span></p>
-            <p><strong>🎟️ Number of Tickets:</strong> <span id="ticketCount"></span></p>
-        </address>
+        <!-- will be filled by JS -->
+        <div id="cartItems"></div>
       </div>
     </div>
 
@@ -140,7 +136,7 @@
           <tr><td>Taxes</td><td align="right" id="ticket-tax">$0.00</td></tr>
         </tbody>
         <tfoot>
-          <tr><td>Total</td><td align="right">$88.36</td></tr>
+          <tr><td>Total</td><td align="right" id="totalFooterCell">$0.00</td></tr>
         </tfoot>
       </table>
     </div>

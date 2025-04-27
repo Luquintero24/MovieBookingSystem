@@ -1,11 +1,10 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import {
   getFirestore,
   collection,
-  query,
-  orderBy,
-  limit,
+  doc,
   getDocs,
+  deleteDoc,
   addDoc
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import {
@@ -14,167 +13,209 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { firebaseConfig } from "../tool/firebaseConfig.js";
 
-// Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+// ─── Initialize Firebase ─────────────────────────────────────────────
+if (!getApps().length) initializeApp(firebaseConfig);
+const db   = getFirestore();
+const auth = getAuth();
+
+// ─── DOM Refs ─────────────────────────────────────────────────────────
+const cartItemsEl   = document.getElementById("cartItems");
+const subtotalEl    = document.getElementById("ticket-total");
+const taxEl         = document.getElementById("ticket-tax");
+const totalEl       = document.getElementById("totalFooterCell");
+const form          = document.getElementById("checkoutForm");
+
+// Payment radios & detail panels
+const venmoRadio    = document.getElementById('venmo');
+const paypalRadio   = document.getElementById('paypal');
+const mcRadio       = document.getElementById('mastercard');
+const venmoDetails  = document.getElementById('venmo-details');
+const paypalDetails = document.getElementById('paypal-details');
+const mcDetails     = document.getElementById('mastercard-details');
 
 let currentUser = null;
-onAuthStateChanged(auth, (user) => {
+
+// ─── Auth & Cart Load ─────────────────────────────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
   currentUser = user;
+  await loadCart();
 });
 
-// Payment toggle fields setup
-const venmoRadio = document.getElementById('venmo');
-const paypalRadio = document.getElementById('paypal');
-const mastercardRadio = document.getElementById('mastercard');
+// ─── Load cart items + compute totals ──────────────────────────────────
+async function loadCart() {
+  cartItemsEl.innerHTML = "<p>Loading your cart…</p>";
+  let subtotal = 0;
 
-const venmoDetails = document.getElementById('venmo-details');
-const paypalDetails = document.getElementById('paypal-details');
-const mastercardDetails = document.getElementById('mastercard-details');
-
-function togglePaymentFields() {
-  const expiryMonth = document.getElementById("expiry-month");
-  const expiryYear = document.getElementById("expiry-year");
-  const cvv = document.getElementById("cvv");
-  const cardName = document.getElementById("cardholdername");
-  const cardNumber = document.getElementById("cardnumber");
-
-  const paypalEmail = document.getElementById("paypal-email");
-  const venmoUsername = document.getElementById("venmo-username");
-
-  if (venmoRadio.checked) {
-    venmoDetails.style.display = 'block';
-    paypalDetails.style.display = 'none';
-    mastercardDetails.style.display = 'none';
-    venmoUsername.setAttribute("required", true);
-    [paypalEmail, expiryMonth, expiryYear, cardName, cardNumber, cvv].forEach(el => el.removeAttribute("required"));
-  } else if (paypalRadio.checked) {
-    venmoDetails.style.display = 'none';
-    paypalDetails.style.display = 'block';
-    mastercardDetails.style.display = 'none';
-    paypalEmail.setAttribute("required", true);
-    [venmoUsername, expiryMonth, expiryYear, cardName, cardNumber, cvv].forEach(el => el.removeAttribute("required"));
-  } else if (mastercardRadio.checked) {
-    venmoDetails.style.display = 'none';
-    paypalDetails.style.display = 'none';
-    mastercardDetails.style.display = 'block';
-    [expiryMonth, expiryYear, cardName, cardNumber, cvv].forEach(el => el.setAttribute("required", true));
-    [paypalEmail, venmoUsername].forEach(el => el.removeAttribute("required"));
-  } else {
-    [venmoDetails, paypalDetails, mastercardDetails].forEach(el => el.style.display = 'none');
-    [expiryMonth, expiryYear, cardName, cardNumber, cvv, paypalEmail, venmoUsername].forEach(el => el.removeAttribute("required"));
+  const snap = await getDocs(collection(db, `users/${currentUser.uid}/cart`));
+  if (snap.empty) {
+    cartItemsEl.innerHTML = "<p>Your cart is empty.</p>";
+    subtotalEl.textContent = "$0.00";
+    taxEl.textContent      = "$0.00";
+    totalEl.textContent    = "$0.00";
+    return;
   }
+
+  cartItemsEl.innerHTML = "";
+  for (let docSnap of snap.docs) {
+    const data = docSnap.data();
+    // read title + theaterName straight from cart doc:
+    const title       = data.movieTitle;   
+    const theaterName = data.theaterName; 
+
+    const lineTotal = data.quantity * data.price;
+    subtotal += lineTotal;
+
+    const row = document.createElement("div");
+    row.className = "checkout-item";
+    row.innerHTML = `
+      <p>
+        <strong>${title}</strong><br>
+        <em>(${theaterName})</em><br>
+        ${data.date} at ${data.time}<br>
+        Qty: ${data.quantity} × $${data.price.toFixed(2)} = $${lineTotal.toFixed(2)}
+      </p>
+    `;
+    cartItemsEl.append(row);
+  }
+
+  const tax = subtotal * 0.0625;
+  subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+  taxEl.textContent      = `$${tax.toFixed(2)}`;
+  totalEl.textContent    = `$${(subtotal + tax).toFixed(2)}`;
 }
 
-// Totals
-const ticketTotalCell = document.querySelector("#ticket-total");
-const taxesCell = document.querySelector("#ticket-tax");
-const totalFooterCell = document.querySelector("tfoot tr td:nth-child(2)");
+// ─── Payment-fields toggle ───────────────────────────
+function togglePaymentFields() {
+  if (venmoRadio.checked) {
+    venmoDetails.style.display = 'block';
+    paypalDetails.style.display = mcDetails.style.display = 'none';
+  } else if (paypalRadio.checked) {
+    paypalDetails.style.display = 'block';
+    venmoDetails.style.display = mcDetails.style.display = 'none';
+  } else {
+    mcDetails.style.display = 'block';
+    venmoDetails.style.display = paypalDetails.style.display = 'none';
+  }
+}
+venmoRadio.addEventListener("change", togglePaymentFields);
+paypalRadio.addEventListener("change", togglePaymentFields);
+mcRadio.addEventListener("change", togglePaymentFields);
+togglePaymentFields();
 
-document.addEventListener("DOMContentLoaded", async () => {
-  togglePaymentFields();
-  venmoRadio.addEventListener("change", togglePaymentFields);
-  paypalRadio.addEventListener("change", togglePaymentFields);
-  mastercardRadio.addEventListener("change", togglePaymentFields);
+// ─── Handle “Buy Now” ─────────────────────────────────────────────────
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  try {
-    const ticketSubtotalsRef = collection(db, "ticketSubtotals");
-    const q = query(ticketSubtotalsRef, orderBy("timestamp", "desc"), limit(1));
-    const snapshot = await getDocs(q);
+  // generate a single order ID for this batch, or per–item
+  const orderId = "TIX-" + Math.floor(1e8 + Math.random() * 9e8);
 
-    if (!snapshot.empty) {
-      const data = snapshot.docs[0].data();
-      const subtotal = data.subtotal;
-      const taxes = subtotal * 0.0625;
-      const total = subtotal + taxes;
+  // re‐query the cart
+  const snap = await getDocs(collection(db, `users/${currentUser.uid}/cart`));
+  for (let docSnap of snap.docs) {
+    const data = docSnap.data();
 
-      ticketTotalCell.textContent = `$${subtotal.toFixed(2)}`;
-      taxesCell.textContent = `$${taxes.toFixed(2)}`;
-      totalFooterCell.textContent = `$${total.toFixed(2)}`;
+    await addDoc(collection(db, "purchaseConfirmation"), {
+      ticketId:    orderId,
+      userId:      currentUser.uid,
+      movie:       data.movieTitle,   // ← human title
+      theater:     data.theaterName,  // ← human name
+      date:        data.date,
+      time:        data.time,
+      ticketCount: data.quantity,
+      subtotal:    data.quantity * data.price,
+      timestamp:   new Date()
+    });
 
-      document.getElementById("movieName").textContent = data.movie;
-      document.getElementById("theaterName").textContent = data.theater;
-      document.getElementById("showtimeText").textContent = `${data.date} at ${data.time}`;
-      document.getElementById("ticketCount").textContent = data.ticketCount;
-    }
-  } catch (error) {
-    console.error("Error fetching subtotal from Firestore:", error);
+    // remove from cart
+    await deleteDoc(doc(db, `users/${currentUser.uid}/cart/${docSnap.id}`));
   }
 
-  const form = document.querySelector("form");
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const uniqueTicketId = "TIX-" + Math.floor(100000000 + Math.random() * 900000000);
-
-    try {
-      const ticketSubtotalsRef = collection(db, "ticketSubtotals");
-      const q = query(ticketSubtotalsRef, orderBy("timestamp", "desc"), limit(1));
-      const snapshot = await getDocs(q);
-
-      if (!snapshot.empty) {
-        const data = snapshot.docs[0].data();
-
-        await addDoc(collection(db, "purchaseConfirmation"), {
-          ticketId: uniqueTicketId,
-          userId: currentUser?.uid || "guest",
-          movie: data.movie,
-          theater: data.theater,
-          date: data.date,
-          time: data.time,
-          ticketCount: data.ticketCount,
-          subtotal: data.subtotal,
-          timestamp: new Date()
-        });
-
-        const modal = document.createElement("div");
-        modal.innerHTML = `
-          <div style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:#000000cc; display:flex; justify-content:center; align-items:center; z-index:9999;">
-            <div style="background:#18181b; color:white; padding:2rem; border-radius:1rem; text-align:center; max-width:90%; width:400px;">
-              <h2 style="color:#FFBF00;">Purchase Successful!</h2>
-              <p>Your electronic ticket number is:</p>
-              <p style="font-size:1.5rem; font-weight:bold; margin:1rem 0;">${uniqueTicketId}</p>
-              <button onclick="window.print()" style="margin:0.5rem; padding:0.5rem 1rem; background:#FFBF00; border:none; border-radius:0.5rem; cursor:pointer;">Print Ticket</button>
-              <button id="downloadTicketBtn" style="margin:0.5rem; padding:0.5rem 1rem; background:#FFBF00; border:none; border-radius:0.5rem; cursor:pointer;">Download Ticket</button>
-              <br><br>
-              <button id="closeModalBtn" style="color:white; background:none; border:none; margin-top:1rem; cursor:pointer;">Close</button>
-            </div>
-          </div>
-        `;
-        document.body.appendChild(modal);
-
-        document.getElementById("closeModalBtn").addEventListener("click", () => {
-          localStorage.removeItem("selectedTickets");
-          localStorage.removeItem("cartDetails");
-        
-          const badge = document.getElementById("cartBadge");
-          if (badge) {
-            badge.textContent = "0";
-            badge.style.display = "none";
-          }
-        
-          window.location.href = "index.html";
-        });
-        
-
-        document.getElementById("downloadTicketBtn").addEventListener("click", async () => {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF();
-          doc.setFont("helvetica", "bold");
-          doc.setFontSize(20);
-          doc.text("RaiderTix Electronic Ticket", 20, 30);
-
-          doc.setFont("helvetica", "normal");
-          doc.setFontSize(14);
-          doc.text(`Ticket ID: ${uniqueTicketId}`, 20, 50);
-          doc.text("Thank you for your purchase!", 20, 70);
-          doc.text("Present this ticket at the entrance.", 20, 80);
-
-          doc.save(`${uniqueTicketId}.pdf`);
-        });
-      }
-    } catch (error) {
-      console.error("Error during checkout:", error);
-    }
-  });
+  // show a simple success modal
+  showPurchaseModal(orderId);
 });
+
+// ─── Successful Purchase Modal ─────────────────────────────────────────────────
+function showPurchaseModal(ticketId) {
+  const modal = document.createElement("div");
+  modal.innerHTML = `
+    <div style="
+      position:fixed;
+      top:0; left:0;
+      width:100vw; height:100vh;
+      background:rgba(0,0,0,0.8);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      z-index:9999;
+    ">
+      <div style="
+        background:#18181b;
+        color:white;
+        padding:2rem;
+        border-radius:1rem;
+        text-align:center;
+        max-width:90%;
+        width:360px;
+      ">
+        <h2 style="color:#FFBF00; margin-bottom:1rem;">Purchase Successful!</h2>
+        <p>Your electronic ticket number is:</p>
+        <p style="
+          font-size:1.25rem;
+          font-weight:bold;
+          margin:1rem 0;
+        ">${ticketId}</p>
+        <div style="margin-bottom:1rem;">
+          <button id="printTicketBtn" style="
+            margin:0.25rem;
+            padding:0.5rem 1rem;
+            background:#FFBF00;
+            border:none;
+            border-radius:0.5rem;
+            cursor:pointer;
+          ">Print Ticket</button>
+          <button id="downloadTicketBtn" style="
+            margin:0.25rem;
+            padding:0.5rem 1rem;
+            background:#FFBF00;
+            border:none;
+            border-radius:0.5rem;
+            cursor:pointer;
+          ">Download PDF</button>
+        </div>
+        <button id="closeModalBtn" style="
+          background:none;
+          border:none;
+          color:#fcd34d;
+          font-size:0.9rem;
+          cursor:pointer;
+        ">Close</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // print
+  modal.querySelector("#printTicketBtn").addEventListener("click", () => window.print());
+
+  // download as PDF via jsPDF (UMD build)
+  modal.querySelector("#downloadTicketBtn").addEventListener("click", () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("RaiderTix Electronic Ticket", 20, 30);
+    doc.setFontSize(14);
+    doc.text(`Ticket ID: ${ticketId}`, 20, 50);
+    // TODO: add more details if you like…
+    doc.save(`${ticketId}.pdf`);
+  });
+
+  // close
+  modal.querySelector("#closeModalBtn").addEventListener("click", () => {
+    document.body.removeChild(modal);
+    window.location.href = "order-history.html";
+  });
+}
