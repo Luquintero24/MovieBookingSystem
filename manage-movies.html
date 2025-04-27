@@ -156,6 +156,31 @@
           </form>
         </div>
       </div>
+	  <!-- Showtimes Modal -->
+	<div id="showtimeModal" class="modal-overlay" style="display: none;">
+		<div class="modal-content" style="max-width:520px;">
+		<h2>Edit Showtimes for <span id="showtimeMovieTitle"></span></h2>
+		<div id="showtimeList"></div>
+		<hr>
+		<h4>Add/Edit Showtime</h4>
+		<form id="showtimeForm">
+			<label>Theater:
+			<select id="showtimeTheater"></select>
+			</label>
+			<label>Date:
+			<input type="date" id="showtimeDate" />
+			</label>
+			<label>Times (comma separated, e.g., 10:00, 14:30, 21:00): 
+			<input type="text" id="showtimeTimes" placeholder="08:00, 10:00, 21:00" />
+			</label>
+			<div style="margin-top:8px;">
+			<button type="submit" id="showtimeSaveBtn">Save</button>
+			<button type="button" id="showtimeCancelBtn">Cancel</button>
+			</div>
+		</form>
+		</div>
+	</div>
+  
       
 
 

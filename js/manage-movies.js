@@ -7,7 +7,9 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
-  addDoc
+  addDoc,
+  query,
+  where,
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import {
   getAuth,
@@ -55,74 +57,36 @@ const saveEditBtn = document.getElementById("saveEditBtn");
 
 let editingMovieId = null;
 
+// Showtimes modal elements
+const showtimeModal      = document.getElementById("showtimeModal");
+const showtimeMovieTitle = document.getElementById("showtimeMovieTitle");
+const showtimeList       = document.getElementById("showtimeList");
+const showtimeTheater    = document.getElementById("showtimeTheater");
+const showtimeDate       = document.getElementById("showtimeDate");
+const showtimeTimes      = document.getElementById("showtimeTimes");
+const showtimeSaveBtn    = document.getElementById("showtimeSaveBtn");
+const showtimeCancelBtn  = document.getElementById("showtimeCancelBtn");
+const showtimeForm       = document.getElementById("showtimeForm");
+let currentShowtimeMovieId = null;
+let theatersListCache = [];
+let editingShowtimeId = null;
+
 // ---- Functions ----
 
-// Fetch and display all movies with showtimes (by theater, date, and times)
+// Fetch and display all movies
 async function loadMovies() {
   movieList.innerHTML = "<div style='text-align:center; color:#fcd34d;'>Loading...</div>";
+  const moviesSnap = await getDocs(collection(db, "movies"));
+  movieList.innerHTML = ""; // Clear
 
-  // Fetch all data in parallel
-  const [moviesSnap, showtimesSnap, theatersSnap] = await Promise.all([
-    getDocs(collection(db, "movies")),
-    getDocs(collection(db, "showtimes")),
-    getDocs(collection(db, "theaters"))
-  ]);
-
-  // Build theater id -> name map
-  const theaterMap = new Map();
-  theatersSnap.forEach(d => {
-    theaterMap.set(d.id, d.data().name || d.id);
-  });
-
-  // Group showtimes by movieId, then by theaterId, then by date
-  const showtimesMap = new Map(); // movieId -> array of showtime objects
-  showtimesSnap.forEach(d => {
-    const s = d.data();
-    if (!showtimesMap.has(s.movieId)) showtimesMap.set(s.movieId, []);
-    showtimesMap.get(s.movieId).push({
-      theaterId: s.theaterId,
-      date: s.date,
-      times: s.times
-    });
-  });
-
-  movieList.innerHTML = "";
   moviesSnap.forEach(docSnap => {
     const data = docSnap.data();
-    const movieId = docSnap.id;
     const card = document.createElement("div");
     card.className = "order-card";
     card.style.background = "#18181b";
     card.style.padding = "24px";
     card.style.borderRadius = "16px";
-    card.style.marginBottom = "30px"
-
-    // Compose showtimes section
-    let showtimesHtml = "";
-    const showArr = showtimesMap.get(movieId) || [];
-    if (showArr.length === 0) {
-      showtimesHtml = "<em>No showtimes listed.</em>";
-    } else {
-      // Group by theaterId, then by date
-      const byTheater = {};
-      showArr.forEach(s => {
-        if (!byTheater[s.theaterId]) byTheater[s.theaterId] = {};
-        if (!byTheater[s.theaterId][s.date]) byTheater[s.theaterId][s.date] = [];
-        byTheater[s.theaterId][s.date].push(...(s.times || []));
-      });
-
-      showtimesHtml = Object.entries(byTheater)
-        .map(([theaterId, dateMap]) => {
-          const theaterName = theaterMap.get(theaterId) || theaterId;
-          let out = `<div style="margin-top:5px;"><strong>📍 ${theaterName}</strong><ul style="margin:0; padding-left:20px;">`;
-          out += Object.entries(dateMap)
-            .map(([date, times]) => {
-              return `<li>${date}: ${times.join(", ")}</li>`;
-            }).join("");
-          out += "</ul></div>";
-          return out;
-        }).join("");
-    }
+    card.style.marginBottom = "30px";
 
     card.innerHTML = `
       <h3 style="color:#fcd34d;">${data.title || "(Untitled Movie)"}</h3>
@@ -135,13 +99,10 @@ async function loadMovies() {
       <p><strong>Runtime:</strong> ${data.runtime ? data.runtime + " min" : "N/A"}</p>
       <p><strong>Status:</strong> ${data.status || "N/A"}</p>
       <p><strong>Synopsis:</strong> ${data.synopsis || ""}</p>
-      <div style="margin-top:8px; margin-bottom:8px;">
-        <strong>Showtimes:</strong><br>
-        ${showtimesHtml}
-      </div>
       <div style="margin-top:12px;">
         <button class="btn btn-yellow" data-action="edit" data-id="${docSnap.id}">Edit</button>
         <button class="btn" style="background:#d64545; color:white; margin-left:10px;" data-action="delete" data-id="${docSnap.id}">Delete</button>
+        <button class="btn" style="background:#3b82f6; color:white; margin-left:10px;" data-action="showtimes" data-id="${docSnap.id}" data-title="${data.title || ""}">Edit Showtimes</button>
       </div>
     `;
     movieList.appendChild(card);
@@ -178,7 +139,7 @@ window.closeModal = function () {
 
 // ---- Handle Save/Edit ----
 saveEditBtn.addEventListener("click", async (e) => {
-  e.preventDefault(); // Prevent form submit!
+  e.preventDefault();
   const movieData = {
     title: editTitle.value.trim(),
     price: Number(editPrice.value) || 0,
@@ -218,13 +179,12 @@ openAddMovieModalBtn.addEventListener("click", () => {
   openModal(false); // Not editing, so it's for add
 });
 
-// ---- Edit/Delete Buttons ----
+// ---- Edit/Delete/Showtimes Buttons ----
 movieList.addEventListener("click", async (e) => {
   const target = e.target;
   const movieId = target.dataset.id;
   if (!movieId) return;
 
-  // Get movie data if needed
   if (target.dataset.action === "edit") {
     // Fetch the movie doc for the modal
     const docSnap = await getDocs(collection(db, "movies"));
@@ -242,6 +202,11 @@ movieList.addEventListener("click", async (e) => {
       alert("Movie deleted.");
     }
   }
+
+  if (target.dataset.action === "showtimes") {
+    const movieTitle = target.dataset.title;
+    openShowtimeModal(movieId, movieTitle);
+  }
 });
 
 // ---- Auth check: Only admin users ----
@@ -250,10 +215,135 @@ onAuthStateChanged(auth, async (user) => {
     window.location.href = "login.html";
     return;
   }
-  // You can add your admin role check here if needed
-  // (as you did before)
   loadMovies();
 });
 
 // ---- Modal Overlay click closes modal ----
 modalOverlay.addEventListener("click", () => closeModal());
+
+// ===============================
+// Showtimes Modal Logic Below
+// ===============================
+
+// Open showtimes modal
+async function openShowtimeModal(movieId, movieTitle) {
+  showtimeModal.style.display = "block";
+  document.body.style.overflow = "hidden";
+  showtimeMovieTitle.textContent = movieTitle;
+  currentShowtimeMovieId = movieId;
+  editingShowtimeId = null;
+
+  // Load theaters for dropdown
+  if (theatersListCache.length === 0) {
+    const theatersSnap = await getDocs(collection(db, "theaters"));
+    theatersListCache = theatersSnap.docs.map(d => ({id:d.id, ...d.data()}));
+  }
+  showtimeTheater.innerHTML = theatersListCache.map(th => 
+    `<option value="${th.id}">${th.name}</option>`
+  ).join("");
+
+  await loadShowtimeList();
+}
+
+// Load and show all showtimes for this movie
+async function loadShowtimeList() {
+  showtimeList.innerHTML = "<em>Loading…</em>";
+  const q = query(collection(db, "showtimes"), where("movieId", "==", currentShowtimeMovieId));
+  const snap = await getDocs(q);
+  if (snap.empty) {
+    showtimeList.innerHTML = "<em>No showtimes.</em>";
+    return;
+  }
+  // Group by theaterId, then date
+  const shows = {};
+  snap.forEach(d => {
+    const {theaterId, date, times = []} = d.data();
+    if (!shows[theaterId]) shows[theaterId] = {};
+    shows[theaterId][date] = {times, id: d.id};
+  });
+  // Render
+  showtimeList.innerHTML = Object.entries(shows).map(([tid, dates]) => {
+    const tName = theatersListCache.find(t => t.id === tid)?.name || tid;
+    return `
+      <div style="margin-bottom:8px;"><b>${tName}</b><ul style="margin:0 0 0 15px;">
+        ${
+          Object.entries(dates).map(([date, {times, id}]) => `
+            <li>
+              <b>${date}:</b> ${times.join(", ")}
+              <button style="margin-left:10px; font-size:12px;" data-stid="${id}" data-action="editrow">Edit</button>
+              <button style="font-size:12px;" data-stid="${id}" data-action="deleterow">Delete</button>
+            </li>
+          `).join("")
+        }
+      </ul></div>
+    `;
+  }).join("");
+}
+
+// Modal open/close
+showtimeCancelBtn.onclick = () => {
+  showtimeModal.style.display = "none";
+  document.body.style.overflow = "auto";
+  showtimeForm.reset();
+};
+showtimeModal.addEventListener("click", (e) => {
+  if (e.target === showtimeModal) {
+    showtimeModal.style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+});
+
+// Add/edit showtime form submit
+showtimeForm.onsubmit = async (e) => {
+  e.preventDefault();
+  const movieId   = currentShowtimeMovieId;
+  const theaterId = showtimeTheater.value;
+  const date      = showtimeDate.value;
+  const times     = showtimeTimes.value.split(",").map(t=>t.trim()).filter(Boolean);
+
+  if (!movieId || !theaterId || !date || !times.length) {
+    alert("All fields required");
+    return;
+  }
+
+  if (editingShowtimeId) {
+    // Update
+    await setDoc(doc(db, "showtimes", editingShowtimeId), {
+      movieId, theaterId, date, times
+    });
+  } else {
+    // Add new (ID: movieId_theaterId_date is unique)
+    await setDoc(doc(db, "showtimes", `${movieId}_${theaterId}_${date}`), {
+      movieId, theaterId, date, times
+    });
+  }
+
+  await loadShowtimeList();
+  showtimeForm.reset();
+  editingShowtimeId = null;
+};
+
+// Edit or delete row buttons (inside showtimeList)
+showtimeList.onclick = async (e) => {
+  const stid = e.target.dataset.stid;
+  if (!stid) return;
+  if (e.target.dataset.action === "editrow") {
+    // Fetch and fill form for editing
+    const snap = await getDocs(collection(db, "showtimes"));
+    let found = null;
+    snap.forEach(d => {
+      if (d.id === stid) found = d.data();
+    });
+    if (found) {
+      editingShowtimeId = stid;
+      showtimeTheater.value = found.theaterId;
+      showtimeDate.value = found.date;
+      showtimeTimes.value = (found.times || []).join(", ");
+    }
+  } else if (e.target.dataset.action === "deleterow") {
+    if (confirm("Delete this showtime?")) {
+      await deleteDoc(doc(db, "showtimes", stid));
+      await loadShowtimeList();
+    }
+  }
+};
