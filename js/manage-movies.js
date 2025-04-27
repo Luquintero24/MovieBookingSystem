@@ -57,20 +57,72 @@ let editingMovieId = null;
 
 // ---- Functions ----
 
-// Fetch and display all movies
+// Fetch and display all movies with showtimes (by theater, date, and times)
 async function loadMovies() {
   movieList.innerHTML = "<div style='text-align:center; color:#fcd34d;'>Loading...</div>";
-  const moviesSnap = await getDocs(collection(db, "movies"));
-  movieList.innerHTML = ""; // Clear
 
+  // Fetch all data in parallel
+  const [moviesSnap, showtimesSnap, theatersSnap] = await Promise.all([
+    getDocs(collection(db, "movies")),
+    getDocs(collection(db, "showtimes")),
+    getDocs(collection(db, "theaters"))
+  ]);
+
+  // Build theater id -> name map
+  const theaterMap = new Map();
+  theatersSnap.forEach(d => {
+    theaterMap.set(d.id, d.data().name || d.id);
+  });
+
+  // Group showtimes by movieId, then by theaterId, then by date
+  const showtimesMap = new Map(); // movieId -> array of showtime objects
+  showtimesSnap.forEach(d => {
+    const s = d.data();
+    if (!showtimesMap.has(s.movieId)) showtimesMap.set(s.movieId, []);
+    showtimesMap.get(s.movieId).push({
+      theaterId: s.theaterId,
+      date: s.date,
+      times: s.times
+    });
+  });
+
+  movieList.innerHTML = "";
   moviesSnap.forEach(docSnap => {
     const data = docSnap.data();
+    const movieId = docSnap.id;
     const card = document.createElement("div");
     card.className = "order-card";
     card.style.background = "#18181b";
     card.style.padding = "24px";
     card.style.borderRadius = "16px";
     card.style.marginBottom = "30px"
+
+    // Compose showtimes section
+    let showtimesHtml = "";
+    const showArr = showtimesMap.get(movieId) || [];
+    if (showArr.length === 0) {
+      showtimesHtml = "<em>No showtimes listed.</em>";
+    } else {
+      // Group by theaterId, then by date
+      const byTheater = {};
+      showArr.forEach(s => {
+        if (!byTheater[s.theaterId]) byTheater[s.theaterId] = {};
+        if (!byTheater[s.theaterId][s.date]) byTheater[s.theaterId][s.date] = [];
+        byTheater[s.theaterId][s.date].push(...(s.times || []));
+      });
+
+      showtimesHtml = Object.entries(byTheater)
+        .map(([theaterId, dateMap]) => {
+          const theaterName = theaterMap.get(theaterId) || theaterId;
+          let out = `<div style="margin-top:5px;"><strong>📍 ${theaterName}</strong><ul style="margin:0; padding-left:20px;">`;
+          out += Object.entries(dateMap)
+            .map(([date, times]) => {
+              return `<li>${date}: ${times.join(", ")}</li>`;
+            }).join("");
+          out += "</ul></div>";
+          return out;
+        }).join("");
+    }
 
     card.innerHTML = `
       <h3 style="color:#fcd34d;">${data.title || "(Untitled Movie)"}</h3>
@@ -83,6 +135,10 @@ async function loadMovies() {
       <p><strong>Runtime:</strong> ${data.runtime ? data.runtime + " min" : "N/A"}</p>
       <p><strong>Status:</strong> ${data.status || "N/A"}</p>
       <p><strong>Synopsis:</strong> ${data.synopsis || ""}</p>
+      <div style="margin-top:8px; margin-bottom:8px;">
+        <strong>Showtimes:</strong><br>
+        ${showtimesHtml}
+      </div>
       <div style="margin-top:12px;">
         <button class="btn btn-yellow" data-action="edit" data-id="${docSnap.id}">Edit</button>
         <button class="btn" style="background:#d64545; color:white; margin-left:10px;" data-action="delete" data-id="${docSnap.id}">Delete</button>
@@ -121,7 +177,8 @@ window.closeModal = function () {
 };
 
 // ---- Handle Save/Edit ----
-saveEditBtn.addEventListener("click", async () => {
+saveEditBtn.addEventListener("click", async (e) => {
+  e.preventDefault(); // Prevent form submit!
   const movieData = {
     title: editTitle.value.trim(),
     price: Number(editPrice.value) || 0,
