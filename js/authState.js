@@ -1,14 +1,19 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import {
+  initializeApp,
+  getApps,
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import {
   getAuth,
   onAuthStateChanged,
-  signOut
+  signOut,
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import {
   getFirestore,
+  collection,
   doc,
-  getDoc
+  getDoc,
+  getDocs,
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import { firebaseConfig } from "../tool/firebaseConfig.js";
 
@@ -24,34 +29,32 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // DOM elements
-const signInBtn = document.getElementById('signInBtn');
-const userInfo = document.querySelector('.user-info');
-const usernameDisplay = document.getElementById('username');
-const signOutBtn = document.getElementById('signOutBtn');
-
+const signInBtn = document.getElementById("signInBtn");
+const userInfo = document.querySelector(".user-info");
+const usernameDisplay = document.getElementById("username");
+const signOutBtn = document.getElementById("signOutBtn");
 
 //Dropdown logic
-const userToggle = document.getElementById('userToggle');
-const userDropdown = document.getElementById('userDropdown');
+const userToggle = document.getElementById("userToggle");
+const userDropdown = document.getElementById("userDropdown");
 
 const cartIcon = document.getElementById("cartIcon");
 const cartBadge = document.getElementById("cartBadge");
 
-userToggle?.addEventListener('click', () => {
-  if (userDropdown.style.display === 'block') {
-    userDropdown.style.display = 'none';
+userToggle?.addEventListener("click", () => {
+  if (userDropdown.style.display === "block") {
+    userDropdown.style.display = "none";
   } else {
-    userDropdown.style.display = 'block';
+    userDropdown.style.display = "block";
   }
 });
 
-document.addEventListener('click', (e) => {
+document.addEventListener("click", (e) => {
   if (!userToggle?.contains(e.target) && !userDropdown?.contains(e.target)) {
-    userDropdown.style.display = 'none';
+    userDropdown.style.display = "none";
   }
 });
 
-// Auth state handler
 // Auth state handler
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -59,13 +62,14 @@ onAuthStateChanged(auth, async (user) => {
       const userDoc = await getDoc(doc(db, "users", user.uid));
       const userData = userDoc.exists() ? userDoc.data() : {};
 
-      if (signInBtn) signInBtn.style.display = 'none';
-      userInfo.style.display = 'flex';
-      cartIcon.style.display = 'block';
+      if (signInBtn) signInBtn.style.display = "none";
+      userInfo.style.display = "flex";
+      cartIcon.style.display = "block";
 
       // ----------- Clean previous extra buttons to avoid duplicates -------------
-      Array.from(userDropdown.querySelectorAll(".dropdown-action"))
-        .forEach(btn => btn.remove());
+      Array.from(userDropdown.querySelectorAll(".dropdown-action")).forEach(
+        (btn) => btn.remove()
+      );
 
       // ----------- ORDER HISTORY BUTTON -----------
       const orderBtn = document.createElement("button");
@@ -102,12 +106,12 @@ onAuthStateChanged(auth, async (user) => {
       settingsBtn.addEventListener("click", () => {
         window.location.href = "user-profile.html";
       });
-      
+
       // — Admin Page button —
       if (userData.role === "admin") {
         const adminBtn = document.createElement("button");
         adminBtn.textContent = "Admin Page";
-        adminBtn.className   = "dropdown-action";
+        adminBtn.className = "dropdown-action";
         adminBtn.style.cssText = `
           background: transparent;
           color: #fcd34d;
@@ -128,39 +132,37 @@ onAuthStateChanged(auth, async (user) => {
       userDropdown.insertBefore(settingsBtn, signOutBtn);
       userDropdown.insertBefore(orderBtn, signOutBtn);
 
-      // ----------- Cart badge logic -----------
-      const cartData = JSON.parse(localStorage.getItem("cartDetails") || "{}");
-      if (cartData.tickets) {
-        cartBadge.textContent = cartData.tickets;
+      // ----------- Cart badge logic (Firestore) -------------
+      const cartRef = collection(db, "users", user.uid, "cart");
+      const cartSnap = await getDocs(cartRef);
+      // sum up all `quantity` fields in cart docs to show on the cart icon
+      const totalTickets = cartSnap.docs.reduce(
+        (sum, d) => sum + (d.data().quantity || 0),
+        0
+      );
+
+      if (totalTickets > 0) {
+        cartBadge.textContent = totalTickets;
         cartBadge.style.display = "inline-block";
       } else {
-        cartBadge.textContent = "0";
-        cartBadge.style.display = "none"; // or "inline-block" if you want it visible
+        cartBadge.style.display = "none";
       }
 
-      const name = userData.firstName || 'User';
-      usernameDisplay.textContent = `Hi, ${name.split(' ')[0]}!`;
+      const name = userData.firstName || "User";
+      usernameDisplay.textContent = `Hi, ${name.split(" ")[0]}!`;
     } catch (err) {
       console.error("Error fetching user info:", err);
     }
   } else {
-    signInBtn.style.display = 'block';
-    userInfo.style.display = 'none';
-    cartIcon.style.display = 'none';
+    signInBtn.style.display = "block";
+    userInfo.style.display = "none";
+    cartIcon.style.display = "none";
   }
 });
 
-
-
-signOutBtn?.addEventListener('click', () => {
+signOutBtn?.addEventListener("click", () => {
   signOut(auth)
     .then(() => {
-      localStorage.removeItem("cartDetails");  
-      const badge = document.getElementById("cartBadge");
-      if (badge) {
-        badge.textContent = "0";
-        badge.style.display = "none"; 
-      }
       window.location.href = "index.html";
     })
     .catch((error) => {
@@ -168,16 +170,7 @@ signOutBtn?.addEventListener('click', () => {
     });
 });
 
-
+// always go to the Firestore-backed cart page
 cartIcon?.addEventListener("click", () => {
-  const details = JSON.parse(localStorage.getItem("cartDetails") || "{}");
-  if (!details.tickets) {
-    alert("Please add tickets to your cart first.");
-    return;
-  }
-
-  const params = new URLSearchParams(details);
-  window.location.href = `cart.html?${params.toString()}`;
+  window.location.href = "cart.html";
 });
-
-
