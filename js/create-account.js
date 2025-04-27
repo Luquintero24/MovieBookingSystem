@@ -2,16 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDdFyRh-V58ONSP6EKWza9M-tr0yhs7l3s",
-  authDomain: "moviebookingswe.firebaseapp.com",
-  projectId: "moviebookingswe",
-  storageBucket: "moviebookingswe.firebasestorage.app",
-  messagingSenderId: "1096382048367",
-  appId: "1:1096382048367:web:6bccbccd1b901e0e24c59a"
-};
+import { firebaseConfig } from "../tool/firebaseConfig.js";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

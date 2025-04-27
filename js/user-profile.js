@@ -10,16 +10,9 @@ import { getFirestore,
 		 updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 console.log("user-profile.js loaded");
+import { firebaseConfig } from "../tool/firebaseConfig.js";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDdFyRh-V58ONSP6EKWza9M-tr0yhs7l3s",
-    authDomain: "moviebookingswe.firebaseapp.com",
-    projectId: "moviebookingswe",
-    storageBucket: "moviebookingswe.appspot.com", 
-    messagingSenderId: "1096382048367",
-    appId: "1:1096382048367:web:6bccbccd1b901e0e24c59a"
-  };
-
+// Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);

@@ -5,6 +5,7 @@ import {
   addDoc
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { firebaseConfig } from "../tool/firebaseConfig.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // DOM references
@@ -39,14 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
   subtotalDisplay.textContent = `$${(ticketCount * pricePerTicket).toFixed(2)}`;
 
   // Firebase init
-  const firebaseConfig = {
-    apiKey: "AIzaSyDdFyRh-V58ONSP6EKWza9M-tr0yhs7l3s",
-    authDomain: "moviebookingswe.firebaseapp.com",
-    projectId: "moviebookingswe",
-    storageBucket: "moviebookingswe.appspot.com",
-    messagingSenderId: "1096382048367",
-    appId: "1:1096382048367:web:6bccbccd1b901e0e24c59a"
-  };
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const auth = getAuth(app);
