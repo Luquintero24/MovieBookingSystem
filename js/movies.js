@@ -17,20 +17,15 @@ const db = getFirestore(app);
 
 const FEATURED_TITLES = [
   "A Minecraft Movie",
-  "Avengers: Infinity War",
   "Moana 2",
   "Captain America: Brave New World",
-  "Iron Man",
 ];
 
 // LOAD FEATURED MOVIES
 async function loadFeaturedMovies() {
   try {
     const featuredEl = document.getElementById("featuredSlides");
-    if (!featuredEl) {
-      console.warn("No #featuredSlides element found for home slider");
-      return;
-    }
+    if (!featuredEl) return console.warn("No #featuredSlides element");
 
     featuredEl.innerHTML = ""; // Clear any placeholder
 
@@ -44,6 +39,7 @@ async function loadFeaturedMovies() {
     // Build a slide (.swiper-slide) for each doc
     snapshot.forEach((docSnap) => {
       const movie = docSnap.data(); // e.g. { title, backdropUrl, synopsis, status, etc. }
+      const id = docSnap.id;
 
       // We'll replicate the structure: .swiper-slide.container
       const slide = document.createElement("div");
@@ -52,11 +48,9 @@ async function loadFeaturedMovies() {
       // Line-break for long title
       function formatTitle(title) {
         const parts = title.split(/[:]/);
-        if (parts.length > 1) {
-          // first part + <br> + the rest (trim to remove leading space)
-          return `${parts[0]}:<br>${parts.slice(1).join(":").trim()}`;
-        }
-        return title;
+        return parts.length > 1
+          ? `${parts[0]}:<br>${parts.slice(1).join(":").trim()}`
+          : title;
       }
 
       slide.innerHTML = `
@@ -64,7 +58,7 @@ async function loadFeaturedMovies() {
         <div class="home-text">
           <span>Featured Movie</span>
           <h1>${formatTitle(movie.title)}</h1>
-          <a href="#" class="btn">Book Now</a>
+          <a href="movie-details.html?id=${id}" class="btn">Book Now</a>
           <a href="#" class="play"><i class='bx bx-play'></i></a>
         </div>
       `;
